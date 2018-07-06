@@ -9,23 +9,26 @@ use App\Http\Controllers\Controller;
 class LoginController extends Controller
 {
 	protected $Model;
-
-	public function __construct ( Manager $manager )
+	
+	public function __construct (Manager $manager)
 	{
 		$this->Model = $manager;
 	}
-
+	
 	//登录
-	public function login ( Request $request )
+	public function login (Request $request)
 	{
 		if ( $request->isMethod( "post" ) ) {
 			$username = $request->get( 'username', '' );
 			$password = $request->get( 'password', '' );
-			$data = $this->Model->getOne( [ [ 'username', $username ] ] );
-			var_dump($data);
+			var_dump( returnJsonData( ['id' => 1] ) );
+			exit;
+			$data = $this->Model->getOne( [['username', $username]] );
+			var_dump( $data );
+			exit;
 		} else {
-			return view( 'login.login', [ 'title' => '文件管理系统' ] );
+			return view( 'login.login', ['title' => '文件管理系统'] );
 		}
 	}
-
+	
 }

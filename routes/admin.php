@@ -10,4 +10,4 @@
 |
 */
 
-Route::match(['get', 'post'], '/', 'LoginController@login');
+Route::match(['get', 'post'], 'login/login', 'LoginController@login');
