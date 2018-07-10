@@ -6,6 +6,7 @@
  * Date: 2018/7/6
  * Time: 16:40
  */
+use \Illuminate\Support\Facades\Session;
 
 //返回json格式数据
 function returnJsonData ($data)
@@ -26,5 +27,18 @@ function getEncryptionString ($string, $salt)
 {
 	if ( !$string || !$salt ) return false;
 	
-	return md5( md5( $string . $salt ) . $salt );
+	return md5( $string . md5( $string . $salt ) . $salt );
+}
+
+function adminSessionPut($key, $value){
+	Session::put($key, $value);
+	Session::save();
+}
+
+function adminSessionGet($key){
+	return Session::get($key);
+}
+
+function adminSessionForget($key){
+	return Session::forget($key);
 }

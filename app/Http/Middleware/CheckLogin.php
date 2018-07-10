@@ -15,6 +15,13 @@ class CheckLogin
      */
     public function handle($request, Closure $next)
     {
+    	if( $request->path() != 'admin/login/login' ){
+			$manager = adminSessionGet('managerData');
+			if( !$manager ){
+				return redirect()->route("login");
+			}
+		}
+    	
         return $next($request);
     }
 }

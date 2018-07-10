@@ -186,7 +186,7 @@
                 success: function (data) {
                     if (data && data.code == 0) {
                         alert('登录成功');
-                        location.href = '{{url("index/index")}}';
+                        location.href = '{{url("admin")}}';
                     } else {
                         alert(data && data.errmsg ? data.errmsg : '登录失败');
                         //refirshVerify();

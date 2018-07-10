@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Eloquent\Manager;
+use App\Logic\ManagerLogic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
-	protected $Model;
+	protected $ManagerLogic;
 	
-	public function __construct (Manager $manager)
+	public function __construct (ManagerLogic $logic)
 	{
-		$this->Model = $manager;
+		$this->ManagerLogic = $logic;
 	}
 	
 	//登录
@@ -21,11 +22,13 @@ class LoginController extends Controller
 		if ( $request->isMethod( "post" ) ) {
 			$username = $request->get( 'username', '' );
 			$password = $request->get( 'password', '' );
-			var_dump( returnJsonData( ['id' => 1] ) );
-			exit;
-			$data = $this->Model->getOne( [['username', $username]] );
-			var_dump( $data );
-			exit;
+			
+			$msg = '';
+			$re = $this->ManagerLogic->login( $username, $password, $msg );
+			if ( !$re ) return responseJsonData( 1, $msg ? $msg : '登陆失败' );
+			
+			return responseJsonData();
+			
 		} else {
 			return view( 'login.login', ['title' => '文件管理系统'] );
 		}
