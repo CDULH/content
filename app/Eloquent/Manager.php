@@ -13,13 +13,14 @@ class Manager extends Model
 	//
 	protected $table = 'manager';
 
-	protected $dates = ['create_time'];
+	protected $dates = [ 'create_time' ];
 
 	protected $dateFormat = 'U';
 
-	/*public function getCreateTimeAttribute($value){
-		return date('Y-m-d', $value);
-	}*/
+	public function getCreateTimeAttribute ( $value )
+	{
+		return date( 'Y-m-d', $value );
+	}
 
 	public function getOne ( $where )
 	{
