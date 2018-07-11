@@ -12,8 +12,11 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
 	
 	<link rel="shortcut icon" href="/mg/img/favicons/favicon.png">
-	
-	<!-- Stylesheets -->
+
+@section('header')
+@show
+
+<!-- Stylesheets -->
 	<!-- Web fonts -->
 	<!-- <link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700"> -->
 	

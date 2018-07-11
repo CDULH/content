@@ -1,11 +1,11 @@
 @extends('public.base')
 @section('header')
 	@php
-		$group = 'Content';
-		$secondNav = 'admin/content';
+		$group = 'Config';
+		$secondNav = 'admin/config';
 	@endphp
 @endsection
-@section('title', '文章')
+@section('title', $title)
 @section("content")
 	<main id="main-container">
 		<div class="content bg-gray-lighter">
@@ -17,7 +17,7 @@
 				<div class="col-sm-5 text-right hidden-xs">
 					<ol class="breadcrumb push-10-t">
 						<li>管理中心</li>
-						<li><a class="link-effect" href="">文章</a></li>
+						<li><a class="link-effect" href="">{{$title}}</a></li>
 					</ol>
 				</div>
 			</div>
@@ -28,7 +28,7 @@
 				<div class="block-content">
 					<div class="push-30 form-inline">
 						<a class="btn btn-sm btn-default" data-toggle="tooltip"
-						   href="{{url('admin/content/modify')}}">编辑{{$title}}</a>
+						   href="{{url('admin/config/modify')}}">编辑{{$title}}</a>
 						<span style="display:inline-block; width:20px; text-align:center; color:#ddd;">|</span>
 						<select class="form-control input-sm"
 								onchange="location.href='{$url}?machine_state='+this.value">
@@ -41,9 +41,8 @@
 							<thead>
 							<tr>
 								<th class="text-center" style="width: 120px;"><i class="si si-user"></i></th>
-								<th style="width:200px;">标题</th>
-								<th style="width:200px;">作者</th>
-								<th style="width:200px;">类型</th>
+								<th style="width:200px;">键</th>
+								<th style="width:200px;">值</th>
 								<th style="width:200px;">创建时间</th>
 								<th class="text-center" style="width: 200px;">操作</th>
 							</tr>
@@ -52,21 +51,20 @@
 							@forelse($list as $item)
 								<tr class="item-row-{$item.id}">
 									<td>{{$item->id}}</td>
-									<td>{{$item->title}}</td>
-									<td>{{$item->author}}</td>
-									<td>{{$item->type->type}}</td>
+									<td>{{$item->k}}</td>
+									<td>{{$item->v}}</td>
 									<td>{{$item->created_at}}</td>
 									<td class="text-center">
 										<a class="btn btn-sm btn-default"
-										   href="{{url('admin/content/modify', [$item->id])}}">编辑</a>
+										   href="{{url('admin/config/modify', [$item->id])}}">编辑</a>
 										<a class="btn btn-sm btn-default del" href='javascript:;'
-										   data-url="{{url('admin/content/remove', [$item->id])}}"
+										   data-url="{{url('admin/config/remove', [$item->id])}}"
 										   title="删除">删除</a>
 									</td>
 								</tr>
 							@empty
 								<tr class="item-row-{$item.id}">
-									<td class="text-center">没有用户</td>
+									<td class="text-center">没有</td>
 								</tr>
 							@endforelse
 							</tbody>
