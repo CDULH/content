@@ -26,7 +26,7 @@ class NavEnum
 				'文章内容管理', 'Content', true, [
 					'020100' => [
 						'文章列表', 'admin/content', true, [
-							'020101' => [ '文章列表', 'admin/content/index', true ],
+							'020101' => [ '文章列表', 'admin/content', true ],
 							'020102' => [ '编辑页面', 'admin/content/modify', true ],
 							'020103' => [ '编辑提交', 'admin/content/modifyPost', true ],
 							'020104' => [ '删除', 'admin/content/remove', true ],
@@ -100,8 +100,8 @@ class NavEnum
 			'050000' => [
 				'权限管理', 'Manager', true, [
 					'050100' => [
-						'管理员列表', 'admin/manager/index', true, [
-							'050101' => [ '管理员列表', 'admin/manager/index', true ],
+						'管理员列表', 'admin/manager', true, [
+							'050101' => [ '管理员列表', 'admin/manager', true ],
 							'050102' => [ '管理员添加', 'admin/manager/add', false ],
 							'050103' => [ '管理员修改', 'admin/manager/modify', false ],
 							'050104' => [ '管理员是否启用', 'admin/manager/setEnable', false ],
@@ -110,11 +110,12 @@ class NavEnum
 					],
 					
 					'050200' => [
-						'管理员角色列表', 'admin/managerRole/index', true, [
-							'050201' => [ '管理员角色列表', 'admin/managerRole/index', true ],
-							'050202' => [ '管理员角色添加修改', 'admin/managerRole/modify', false ],
-							'050203' => [ '管理员角色权限修改', 'admin/managerRole/permission', false ],
-							'050204' => [ '管理员角色删除', 'admin/managerRole/remove', false ],
+						'管理员角色列表', 'admin/managerRole', true, [
+							'050201' => [ '管理员角色列表', 'admin/managerRole', true ],
+							'050202' => [ '管理员角色编辑页面', 'admin/managerRole/modify', false ],
+							'050203' => [ '管理员角色编辑提交', 'admin/managerRole/modifyPost', false ],
+							'050204' => [ '管理员角色权限修改', 'admin/managerRole/permission', false ],
+							'050205' => [ '管理员角色删除', 'admin/managerRole/remove', false ],
 						]
 					],
 				

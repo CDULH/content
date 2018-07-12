@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ConfigRequest extends FormRequest
+class ManagerRoleRequest extends FormRequest
 {
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class ConfigRequest extends FormRequest
 	public function rules ()
 	{
 		return [
-			'role'        => 'required|alpha',
+			'role'        => 'required',
 			'description' => 'required'
 		];
 	}

@@ -43,7 +43,7 @@ class ConfigController extends BaseController
 	{
 		$data = $request->all();
 		$re   = $this->Config->saveOne( $data );
-		if ( !$re ) return response( '操作错误', 200 );
+		if ( !$re ) return back();
 		
 		return response()->redirectTo( url( 'admin/config' ) );
 	}
@@ -51,7 +51,7 @@ class ConfigController extends BaseController
 	public function remove ( Request $request, $id )
 	{
 		$re = $this->Config->deleteOne( $id );
-		if ( !$id ) return response( '删除错误', 200 );
+		if ( !$id ) return back();
 		
 		return redirect()->route( 'config' );
 	}

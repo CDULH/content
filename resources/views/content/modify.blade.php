@@ -25,6 +25,7 @@
 				</div>
 			</div>
 		</div>
+		@include('errors.error_lay')
 		<div class="content">
 			<div class="block">
 				<div class="block-content block-content-narrow">

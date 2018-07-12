@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,7 +45,25 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+    	//自定义异常处理页面
+		if($exception instanceof TokenMismatchException){
+		
+			if($request->ajax()){
+			
+				return response()->json(['ret'=>'ERROR','message'=>'表单重复提交，请刷新页面再试'],400);
+			
+			}
+		
+			return back()->withInput()->withErrors('表单重复提交，请刷新页面再试！');
+		
+		}
+		
+		if($exception instanceof \Symfony\Component\Debug\Exception\FatalErrorException
+			&& !config('app.debug')) {
+			return response()->view('errors.500', [], 500);
+		}
+		
+		return parent::render($request, $exception);
     }
 
     /**

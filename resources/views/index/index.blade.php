@@ -1,5 +1,11 @@
 @extends('public.base')
 @section('title', '文章管理系统');
+@section('header')
+	@php
+		$group = 'Index';
+		$secondNav = 'admin';
+	@endphp
+@endsection
 @section("content")
 	<main id="main-container">
 		<!-- Page Header -->

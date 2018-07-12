@@ -60,24 +60,32 @@
 			<div class="side-content">
 				<ul class="nav-main">
 					<li>
-						<a class="" href="{{url('admin')}}"><i class="si si-speedometer"></i><span
+						<a class="{{'Index'==$group?'active':''}}" href="{{url('admin')}}"><i
+									class="si si-speedometer"></i><span
 									class="sidebar-mini-hide">系统总览</span></a>
 					</li>
 					@php
 						$nav = \App\Enum\NavEnum::getNavArr();
+						$managerData = adminSessionGet("managerData");
+						$currentPermission = explode(',', $managerData['auth_access']);
 					@endphp
-					@foreach($nav as $item)
-						<li class="{{$item[1]==$group?'open':''}}">
-							<a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class=""></i><span
-										class="sidebar-mini-hide">{{$item[0]}}</span></a>
-							@foreach($item[3] as $item2)
-								<ul>
-									<li>
-										<a class=" {{$item2[1]==$secondNav?'active':''}}" href="{{url($item2[1])}}">{{$item2[0]}}</a>
-									</li>
-								</ul>
-							@endforeach
-						</li>
+					@foreach($nav as $key=>$item)
+						@if(in_array($key, $currentPermission) || $managerData['supper_master'])
+							<li class="{{$item[1]==$group?'open':''}}">
+								<a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class=""></i><span
+											class="sidebar-mini-hide">{{$item[0]}}</span></a>
+								@foreach($item[3] as $k=>$item2)
+									@if(in_array($k, $currentPermission) || $managerData['supper_master'])
+										<ul>
+											<li>
+												<a class=" {{$item2[1]==$secondNav?'active':''}}"
+												   href="{{url($item2[1])}}">{{$item2[0]}}</a>
+											</li>
+										</ul>
+									@endif
+								@endforeach
+							</li>
+						@endif
 					@endforeach
 				</ul>
 			</div>

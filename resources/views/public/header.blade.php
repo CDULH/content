@@ -10,12 +10,12 @@
 				<ul class="dropdown-menu dropdown-menu-right">
 					<li class="dropdown-header">管理员操作</li>
 					<li>
-						<a tabindex="-1" href="{:url('Login/modifyPwd')}">
+						<a tabindex="-1" href="">
 							<i class="si si-lock pull-right"></i>修改密码
 						</a>
 					</li>
 					<li>
-						<a tabindex="-1" href="{:url('Login/logout')}">
+						<a tabindex="-1" href="{{url('admin/logout')}}">
 							<i class="si si-logout pull-right"></i>退出
 						</a>
 					</li>

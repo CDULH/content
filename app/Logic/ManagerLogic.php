@@ -36,7 +36,7 @@ class ManagerLogic
 			return false;
 		}
 		
-		$session = ['id' => $data['id'], 'username' => $data['username'], 'supper_master' => $data['supper_master']];
+		$session = ['id' => $data['id'], 'username' => $data['username'], 'supper_master' => $data['supper_master'], 'auth_access'=>$data->role?$data->role->auth_access:''];
 		
 		adminSessionPut( 'managerData', $session );
 		

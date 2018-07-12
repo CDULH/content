@@ -48,7 +48,7 @@ class ContentController extends BaseController
 	{
 		$data = $request->all();
 		$re   = $this->Content->saveOne( $data );
-		if ( !$re ) return response( '操作错误', 200 );
+		if ( !$re ) return back();
 		
 		return response()->redirectTo( url( 'admin/content' ) );
 	}
@@ -56,7 +56,7 @@ class ContentController extends BaseController
 	public function remove ( Request $request, $id )
 	{
 		$re = $this->Content->deleteOne( $id );
-		if ( !$id ) return response( '删除错误', 200 );
+		if ( !$id ) return back();
 		
 		return redirect()->route( 'content' );
 	}

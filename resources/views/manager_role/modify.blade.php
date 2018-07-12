@@ -2,8 +2,8 @@
 @section('title', '文章')
 @section('header')
 	@php
-		$group = 'Config';
-		$secondNav = 'admin/config';
+		$group = 'Manager';
+		$secondNav = 'admin/managerRole';
 	@endphp
 @endsection
 @section("content")
@@ -30,20 +30,20 @@
 			<div class="block">
 				<div class="block-content block-content-narrow">
 					<form class="js-validation-bootstrap form-horizontal" id="modify_form"
-						  action="{{url("admin/config/modifyPost")}}" method="post" onsubmit="">
+						  action="{{url("admin/managerRole/modifyPost")}}" method="post" onsubmit="">
 						
 						<div class="form-group">
-							<label class="col-md-2 control-label">键<span class="text-danger">*</span></label>
+							<label class="col-md-2 control-label">角色<span class="text-danger">*</span></label>
 							<div class="col-md-4">
-								<input class="form-control val-username" type="text" placeholder="不能为空" name="k"
-									   value="{{$data->k or ''}}">
+								<input class="form-control val-username" type="text" placeholder="不能为空" name="role"
+									   value="{{$data->role or ''}}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-md-2 control-label">值<span class="text-danger">*</span></label>
-							<div class="col-md-10">
-								<textarea class="form-control js-summernote" type="text"
-										  name="v">{{$data->v or ''}}</textarea>
+							<label class="col-md-2 control-label">描述<span class="text-danger">*</span></label>
+							<div class="col-md-4">
+								<input class="form-control val-username" type="text" placeholder="不能为空" name="description"
+									   value="{{$data->description or ''}}">
 							</div>
 						</div>
 						{{csrf_field()}}

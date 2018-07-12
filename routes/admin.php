@@ -14,14 +14,24 @@ Route::match( ['get', 'post'], 'login/login', 'LoginController@login' )->name('l
 Route::match( ['get'], '/', 'IndexController@index' );
 Route::match( ['get', 'post'], '/logout', 'IndexController@logout' )->name('logout');
 
-Route::match( ['get', 'post'], '/content', 'ContentController@index' )->name('content');
-Route::match( ['get', 'post'], '/content/modify/{id?}', 'ContentController@modify' )->name('content/modify');
+Route::match( ['get'], '/content', 'ContentController@index' )->name('content');
+Route::match( ['get'], '/content/modify/{id?}', 'ContentController@modify' )->name('content/modify');
 Route::match( ['get'], '/content/remove/{id}', 'ContentController@remove' )->name('content/remove');
 Route::match( ['post'], '/content/modifyPost', 'ContentController@modifyPost' )->name('content/modifyPost');
 
 Route::match( ['get'], '/config', 'ConfigController@index' )->name('config');
-Route::match( ['get', 'post'], '/config/modify/{id?}', 'ConfigController@modify' )->name('config/modify');
+Route::match( ['get'], '/config/modify/{id?}', 'ConfigController@modify' )->name('config/modify');
 Route::match( ['get'], '/config/remove/{id}', 'ConfigController@remove' )->name('config/remove');
 Route::match( ['post'], '/config/modifyPost', 'ConfigController@modifyPost' )->name('config/modifyPost');
 
+Route::match( ['get'], '/manager', 'ManagerController@index' )->name('manager');
+Route::match( ['get',], '/manager/modify/{id?}', 'ManagerController@modify' )->name('manager/modify');
+Route::match( ['get'], '/manager/remove/{id}', 'ManagerController@remove' )->name('manager/remove');
+Route::match( ['post'], '/manager/modifyPost', 'ManagerController@modifyPost' )->name('manager/modifyPost');
 
+Route::match( ['get'], '/managerRole', 'ManagerRoleController@index' )->name('managerRole');
+Route::match( ['get',], '/managerRole/modify/{id?}', 'ManagerRoleController@modify' )->name('managerRole/modify');
+Route::match( ['get'], '/managerRole/remove/{id}', 'ManagerRoleController@remove' )->name('managerRole/remove');
+Route::match( ['post'], '/managerRole/modifyPost', 'ManagerRoleController@modifyPost' )->name('managerRole/modifyPost');
+Route::match( ['get'], '/managerRole/permission/{id}', 'ManagerRoleController@permission' )->name('managerRole/permission');
+Route::match( ['post'], '/managerRole/permissionPost', 'ManagerRoleController@permissionPost' )->name('managerRole/permissionPost');
