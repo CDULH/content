@@ -18,24 +18,27 @@ class CheckLogin
     {
     	//检查登陆
 		$name = $request->path();
-    	if( $name != 'admin/login/login' && $name != 'admin' && $name != 'admin/logout' ){
+    	if( $name != 'admin/login/login' && $name != 'admin/logout' ){
 			$manager = adminSessionGet('managerData');
 			if( !$manager ){
 				return redirect()->route("login");
 			}
 		
-			//检查权限
-			if( !$manager['supper_master'] ){
-				$auth_access = explode(',', $manager['auth_access']);
-				
-				$navTree = NavEnum::getNavArr();
-				if( !$this->check_auth($navTree, $name, $auth_access) ){
-					if( $request->ajax() )
-						return response()->json(['code'=>100, 'msg'=>'抱歉，您没有权限！！！']);
-					else
-						return response()->view('errors.deny');
+			if( $name != 'admin' ){
+				//检查权限
+				if( !$manager['supper_master'] ){
+					$auth_access = explode(',', $manager['auth_access']);
+					
+					$navTree = NavEnum::getNavArr();
+					if( !$this->check_auth($navTree, $name, $auth_access) ){
+						if( $request->ajax() )
+							return response()->json(['code'=>100, 'msg'=>'抱歉，您没有权限！！！']);
+						else
+							return response()->view('errors.deny');
+					}
 				}
 			}
+			
 		}
         return $next($request);
     }
