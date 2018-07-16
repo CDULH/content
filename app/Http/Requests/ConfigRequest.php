@@ -24,8 +24,8 @@ class ConfigRequest extends FormRequest
 	public function rules ()
 	{
 		return [
-			'role'        => 'required|alpha',
-			'description' => 'required'
+			'k' => 'required|alpha',
+			'v' => 'required'
 		];
 	}
 }

@@ -23,7 +23,7 @@ class NavEnum
 			
 			
 			'020000' => [
-				'文章内容管理', 'Content', true, [
+				'内容管理', 'Content', true, [
 					'020100' => [
 						'文章列表', 'admin/content', true, [
 							'020101' => [ '文章列表', 'admin/content', true ],

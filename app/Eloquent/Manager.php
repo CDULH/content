@@ -2,31 +2,9 @@
 
 namespace App\Eloquent;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Manager extends Model
+class Manager extends Base
 {
 	protected $table = 'manager';
-	
-	protected $dateFormat = 'U';
-	
-	public function getOne ( $where )
-	{
-		try {
-			return $this->where( $where )->firstOrFail();
-		} catch ( \Exception $e ) {
-			return null;
-		}
-	}
-	
-	public function getList ( $where )
-	{
-		try {
-			return $this->where( $where )->simplePaginate( 10 );
-		} catch ( \Exception $e ) {
-			return null;
-		}
-	}
 	
 	public function role(){
 		return $this->belongsTo('App\Eloquent\ManagerRole', 'role_id');
@@ -43,7 +21,6 @@ class Manager extends Model
 			$salt   = mt_rand( 100000, 999999 );
 		}
 		
-		
 		if ( isset( $data[ 'role_id' ] ) ) $config->role_id = $data[ 'role_id' ];
 		if ( isset( $data[ 'nickname' ] ) ) $config->nickname = $data[ 'nickname' ];
 		if ( isset( $data[ 'auth_access' ] ) ) $config->auth_access = $data[ 'auth_access' ];
@@ -54,20 +31,10 @@ class Manager extends Model
 		if ( isset( $data[ 'enable' ] ) ) $config->enable = $data[ 'enable' ];
 		if ( isset( $data[ 'last_login_time' ] ) ) $config->last_login_time = $data[ 'last_login_time' ];
 		
-		
 		$re = $config->save();
 		if ( !$re ) return false;
 		
 		return true;
 	}
 	
-	//删除
-	public function deleteOne ( $id )
-	{
-		$content = $this->where( 'id', $id )->first();
-		$re      = $content->delete();
-		if ( !$re ) return false;
-		
-		return true;
-	}
 }
