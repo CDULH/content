@@ -35,6 +35,20 @@ class Base extends Model
 		}
 	}
 	
+	/***
+	 * 获取所有
+	 * @param array $where
+	 * @return \Illuminate\Database\Eloquent\Collection|null|static[]
+	 */
+	public function getAll ($where = [])
+	{
+		try {
+			return $this->get();
+		} catch ( \Exception $e ) {
+			return null;
+		}
+	}
+	
 	/**
 	 * 删除
 	 * @param $id
@@ -49,17 +63,4 @@ class Base extends Model
 		return true;
 	}
 	
-	/***
-	 * 获取所有
-	 * @param array $where
-	 * @return \Illuminate\Database\Eloquent\Collection|null|static[]
-	 */
-	public function getAll ($where = [])
-	{
-		try {
-			return $this->get();
-		} catch ( \Exception $e ) {
-			return null;
-		}
-	}
 }

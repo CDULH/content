@@ -136,6 +136,12 @@ class NavEnum
 							'070101' => [ '基础设置', 'admin/config', true ],
 						]
 					],
+					
+					'070200' => [
+						'BANNER设置', 'admin/banner', true, [
+							'070201' => [ 'banner列表', 'admin/banner', true ],
+						]
+					],
 				
 				], 'fa fa-cogs'
 			],

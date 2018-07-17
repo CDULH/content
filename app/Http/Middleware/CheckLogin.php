@@ -38,9 +38,9 @@ class CheckLogin
 					}
 				}
 			}
-			
 		}
-        return $next($request);
+		apiLog(0, $name, '', '', $request->all()?$request->all():'');
+		return $next($request);
     }
     
     protected function check_auth($navTree, $name, $auth_access){
