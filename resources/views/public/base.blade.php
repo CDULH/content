@@ -12,6 +12,22 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
 	
 	<link rel="shortcut icon" href="/mg/img/favicons/favicon.png">
+	
+	<link rel="icon" type="image/png" href="/mg/img/favicons/favicon-16x16.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="/mg/img/favicons/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/mg/img/favicons/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="/mg/img/favicons/favicon-160x160.png" sizes="160x160">
+	<link rel="icon" type="image/png" href="/mg/img/favicons/favicon-192x192.png" sizes="192x192">
+	
+	<link rel="apple-touch-icon" sizes="57x57" href="/mg/img/favicons/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/mg/img/favicons/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/mg/img/favicons/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/mg/img/favicons/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/mg/img/favicons/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/mg/img/favicons/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/mg/img/favicons/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/mg/img/favicons/apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/mg/img/favicons/apple-touch-icon-180x180.png">
 
 @section('header')
 @show
@@ -21,11 +37,18 @@
 	<!-- <link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700"> -->
 	
 	<!-- Page JS Plugins CSS -->
-	<link rel="stylesheet" href="/mg/js/plugins/slick/slick.min.css">
-	<link rel="stylesheet" href="/mg/js/plugins/slick/slick-theme.min.css">
-	<link href="/mg/js/plugins/bootstrap-dialog/bootstrap-dialog-1.34.7.min.css" rel="stylesheet">
 	
-	<!-- OneUI CSS framework -->
+	<!-- Page JS Plugins CSS -->
+	<link rel="stylesheet" href="/mg/js/plugins/sweetalert2/sweetalert2.min.css">
+	
+	<link rel="stylesheet" href="/mg/js/plugins/select2/select2.min.css">
+	<link rel="stylesheet" href="/mg/js/plugins/select2/select2-bootstrap.min.css">
+	
+	<link rel="stylesheet" href="/mg/js/plugins/summernote/summernote.min.css">
+	<link rel="stylesheet" href="/mg/js/plugins/simplemde/simplemde.min.css">
+	
+	<!-- Bootstrap and OneUI CSS framework -->
+	<link rel="stylesheet" href="/mg/css/bootstrap.min.css">
 	<link rel="stylesheet" id="css-main" href="/mg/css/oneui.css">
 	<style type="text/css">
 		h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, body, .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th {
@@ -87,31 +110,37 @@
 		</div>
 	</footer>
 </div>
-
-<script src="/mg/js/jquery-2.2.3.min.js"></script>
-<script src="/mg/js/ajaxfileupload.js"></script>
+<div id="page-loader" style="opacity: 0.5"></div>
+<script src="/mg/js/core/jquery.min.js"></script>
 <script src="/mg/js/core/bootstrap.min.js"></script>
 <script src="/mg/js/core/jquery.slimscroll.min.js"></script>
 <script src="/mg/js/core/jquery.scrollLock.min.js"></script>
 <script src="/mg/js/core/jquery.appear.min.js"></script>
 <script src="/mg/js/core/jquery.countTo.min.js"></script>
 <script src="/mg/js/core/jquery.placeholder.min.js"></script>
-<script src="/mg/js/core/jquery.sortable.js"></script>
 <script src="/mg/js/core/js.cookie.min.js"></script>
-<script src="/mg/js/plugins/bootstrap-dialog/bootstrap-dialog-1.34.7.min.js"></script>
 <script src="/mg/js/app.js"></script>
+
+<!-- Page Plugins -->
+
+<!-- Page JS Code -->
 <script src="/mg/js/script.js"></script>
 <script src="/mg/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+<script src="/mg/js/plugins/sweetalert2/es6-promise.auto.min.js"></script>
+<script src="/mg/js/plugins/sweetalert2/sweetalert2.min.js"></script>
 <script src="/mg/js/pages/base_ui_activity.js"></script>
+<script src="/mg/js/plugins/select2/select2.full.min.js"></script>
 <script src="/mg/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="/mg/js/pages/base_forms_validation.js"></script>
-
+<script src="/mg/js/plugins/jquery-validation/additional-methods.min.js"></script>
+<script src="/mg/js/plugins/summernote/summernote.min.js"></script>
+<script src="/mg/js/plugins/ckeditor/ckeditor.js"></script>
+<script src="/mg/js/plugins/simplemde/simplemde.min.js"></script>
 @section("footer_js")
 
 @show
 <script>
     $(function () {
-        App.initHelpers('notify');
+        App.initHelpers(['notify', 'summernote', 'ckeditor', 'simplemde']);
     });
 </script>
 </body>

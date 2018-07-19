@@ -44,6 +44,10 @@ a {
         }
     }
 
+    &.link-effect-opacity {
+        .transition(opacity .25s ease-out);
+    }
+
     &:hover,
     &:focus {
         color: @link-hover-color;
@@ -52,6 +56,10 @@ a {
         &.link-effect:before {
             visibility: visible;
             .scaleX(1);
+        }
+
+        &.link-effect-opacity {
+            opacity: .5;
         }
     }
 
@@ -75,13 +83,13 @@ h1, h2, h3, h4, h5, h6,
     font-family: @headings-font-family;
     font-weight: @headings-font-weight;
     line-height: @headings-line-height;
-    color: inherit;
+    color: @headings-color;
 
     small,
     .small {
         font-weight: @headings-font-weight;
         font-size: 85%;
-        color: #777;
+        color: @headings-small-color;
     }
 }
 
@@ -100,13 +108,14 @@ h6, .h6 { font-size: @font-size-h6; }
     color: @text-color-dark;
     font-size: 28px;
     font-weight: 400;
+    line-height: 1.24;
 
     small {
         margin-top: 5px;
         display: block;
         color: #777;
         font-size: 16px;
-        font-weight: 300;
+        font-weight: 400;
         line-height: 1.4;
 
         @media screen and (min-width: @screen-sm-min) {
@@ -156,6 +165,12 @@ p {
     &.nice-copy,
     .nice-copy & {
         line-height: 1.8;
+    }
+
+    &.nice-copy-story,
+    .nice-copy-story & {
+        line-height: 1.8;
+        font-size: 16px;
     }
 }
 
@@ -288,6 +303,10 @@ p {
         .bg-variant(@brand-lighter);
     }
 
+    &-body {
+        background-color: @body-bg;
+    }
+
     &-success {
         .bg-variant(@brand-success);
     }
@@ -326,6 +345,10 @@ p {
 
     &-white-op {
         background-color: rgba(255,255,255,.075);
+    }
+
+    &-crystal-op {
+        background-color: rgba(255,255,255,.15);
     }
 
     &-black {
@@ -468,8 +491,7 @@ label {
 
     input[type="text"]&,
     input[type="password"]&,
-    input[type="email"]&,
-    textarea& {
+    input[type="email"]& {
         -webkit-appearance: none;
     }
 
@@ -863,6 +885,7 @@ a.list-group-item {
         content: "\f105";
         width: 20px;
         text-align: center;
+        vertical-align: top;
     }
 }
 

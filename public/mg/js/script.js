@@ -1,6 +1,6 @@
 function ContentListSelect() {
     //删除单条
-    function removeone($c, id){
+    function removeone($c, id) {
         var data_removeurl = $c.data("removeurl"),
             data_baseurl = $c.data("baseurl"),
             data_keyname = $c.data("keyname"),
@@ -11,21 +11,21 @@ function ContentListSelect() {
         ajaxdata[keyname] = id;
 
         $.ajax({
-            url : url,
-            data : ajaxdata,
+            url: url,
+            data: ajaxdata,
             dataType: 'json',
-            success : function(data){
-                if( data && data.errcode==0 ){
-                    $c.find(".item-row-"+id).remove();
+            success: function (data) {
+                if (data && data.errcode == 0) {
+                    $c.find(".item-row-" + id).remove();
                 }
             },
-            error : function(){}
+            error: function () {
+            }
         });
     }
 
     //删除多条
-    function removemult($c, arr)
-    {
+    function removemult($c, arr) {
         var data_removeurl = $c.data("removeurl"),
             data_baseurl = $c.data("baseurl"),
             data_keyname = $c.data("keyname"),
@@ -34,24 +34,23 @@ function ContentListSelect() {
         ajaxdata = {},
             i = 0;
 
-        function r()
-        {
-            if( i >= arr.length ){
+        function r() {
+            if (i >= arr.length) {
                 window.location.reload();
                 return;
             }
             ajaxdata[keyname] = arr[i];
             $.ajax({
-                url : url,
-                data : ajaxdata,
+                url: url,
+                data: ajaxdata,
                 dataType: 'json',
-                success : function(data){
-                    if( data && data.errcode==0 ){
+                success: function (data) {
+                    if (data && data.errcode == 0) {
                         i++;
                         r();
                     }
                 },
-                error : function(){
+                error: function () {
                     i++;
                     r();
                 }
@@ -62,141 +61,144 @@ function ContentListSelect() {
     }
 
     //选择了行
-    function selectChange($c)
-    {
-        if( $c.find("input:checked.select-one").length > 0) {
+    function selectChange($c) {
+        if ($c.find("input:checked.select-one").length > 0) {
             $c.find(".remove-mult").removeClass("disabled");
-        }else{
+        } else {
             $c.find(".remove-mult").addClass("disabled");
         }
     }
 
 
-    function Obj(){}
-    Obj.prototype.init = function(){
+    function Obj() {
+    }
+
+    Obj.prototype.init = function () {
         //全选
-        $(".select-all").change(function(){
+        $(".select-all").change(function () {
             var $c = $(this).parents(".content-list");
-            if( this.checked ){
+            if (this.checked) {
                 var $lis = $c.find("input.select-one");
-                $lis.each(function(){
+                $lis.each(function () {
                     this.checked = true;
                 });
-                if( $lis.length > 0 )
+                if ($lis.length > 0)
                     $c.find(".remove-mult").removeClass("disabled");
-            }else{
+            } else {
                 $c.find("input.select-one").attr("checked", false);
                 $c.find(".remove-mult").addClass("disabled");
             }
         });
 
         //选择一行
-        $(".select-one").change(function(){
+        $(".select-one").change(function () {
             selectChange($(this).parents(".content-list"));
         });
 
         //删除多行
-        $(".remove-mult").click(function(){
+        $(".remove-mult").click(function () {
             var $c = $(this).parents(".content-list");
             var $list = $c.find("input:checked.select-one");
             var arr = [];
-            $list.each(function(){
-                arr.push( $(this).data("select") );
+            $list.each(function () {
+                arr.push($(this).data("select"));
             });
-            if( arr && confirm("您确定要删除该数据吗？") ){
+            if (arr && confirm("您确定要删除该数据吗？")) {
                 removemult($c, arr);
             }
         });
 
         //删除一行
-        $(".remove-one").click(function(){
+        $(".remove-one").click(function () {
             var select = $(this).data('select');
-            if( !select ){
+            if (!select) {
                 return;
             }
             var $c = $(this).parents(".content-list");
-            var $select = $c.find("input[data-select='"+select+"'].select-one");
+            var $select = $c.find("input[data-select='" + select + "'].select-one");
             var tipsText = "您确定要删除该数据吗？";
             var childrencount = $select.data('childrencount');
-            if( $select.data('childrencount') ){
+            if ($select.data('childrencount')) {
                 tipsText += "此操作将会删除所有子级";
             }
-            if( confirm(tipsText) ){
+            if (confirm(tipsText)) {
                 removeone($c, select);
             }
         });
 
         //排序
         var sortValue = new Array(2);
-        $("td.sort > input").focus(function(){
+        $("td.sort > input").focus(function () {
             sortValue[0] = $(this).data('select');
             sortValue[1] = $(this).val();
-        }).blur(function(){
-            if( !sortValue ){
+        }).blur(function () {
+            if (!sortValue) {
                 return;
             }
             var id = $(this).data('select');
             var sort = $(this).val();
-            if( sortValue[0] !== id || sortValue[1] == sort ){
+            if (sortValue[0] !== id || sortValue[1] == sort) {
                 return;
             }
 
             var $c = $(this).parents(".content-list");
 
             $.ajax({
-                url : $c.data("sorturl") ? $c.data("sorturl") : $c.data("baseurl")+ "/sort",
-                data : {id:id, sort:sort},
-                success : function(data){
-                    if( parseInt(data) > 0 ){
+                url: $c.data("sorturl") ? $c.data("sorturl") : $c.data("baseurl") + "/sort",
+                data: {id: id, sort: sort},
+                success: function (data) {
+                    if (parseInt(data) > 0) {
                         window.location.reload();
                     }
                 },
-                error : function(){}
+                error: function () {
+                }
             });
         });
     }
 
     return new Obj();
 }
+
 $(function () {
     window.contentListSelect = new ContentListSelect();
     window.contentListSelect.init();
 
     App.initHelpers('slick');
-    $('.btn-confirm-popup').click(function(){
+    $('.btn-confirm-popup').click(function () {
         var title = $(this).data("title"),
             url = $(this).data('url');
-        if( !confirm('您确认要操作【'+title+'】按钮') ){
+        if (!confirm('您确认要操作【' + title + '】按钮')) {
             return false;
         }
-        
+
 //        if( title == "取消" ){
 //        	var newOpen = window.open( $('.btn-jump-url').data('hxloadingurl') );
 //        }
-        
+
         $.ajax({
             url: url,
             dataType: 'json',
             type: 'get',
-            error: function(){
-                if( title=="取消" ){
-                	//newOpen.close();
+            error: function () {
+                if (title == "取消") {
+                    //newOpen.close();
                 }
                 alert('操作失败');
             },
-            success: function(data){
-                if( data.errcode!=0 ){
-                	if( title=="取消" ){
-                    	//newOpen.close();
+            success: function (data) {
+                if (data.errcode != 0) {
+                    if (title == "取消") {
+                        //newOpen.close();
                     }
-                    return alert( data.errmsg ? data.errmsg : '操作失败' );
+                    return alert(data.errmsg ? data.errmsg : '操作失败');
                 }
-                if( title=="取消" ){
-                	//newOpen.location.href = $('.btn-jump-url').data('hxjumpurl');
-                	alert('操作成功');
+                if (title == "取消") {
+                    //newOpen.location.href = $('.btn-jump-url').data('hxjumpurl');
+                    alert('操作成功');
                     window.location.reload();
-                }else{
-                	alert('操作成功');
+                } else {
+                    alert('操作成功');
                     window.location.reload();
                 }
             }
@@ -204,56 +206,160 @@ $(function () {
         return false;
     });
 
-    $(".table-hover > tbody > tr").on("click",function(){
+    $(".table-hover > tbody > tr").on("click", function () {
         $this = $(this);
-        $this.css("background-color","#FBE9AD").siblings().css("background-color","#fff");
+        $this.css("background-color", "#FBE9AD").siblings().css("background-color", "#fff");
     });
-
-    //确认框弹窗
-    window.promptAlert = function(msg, onHideHandler) {
-        var $dom = $('<div class="modal fade" id="modal-fadein" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; background: #9999; padding-right: 17px;"><div class="modal-dialog" style="margin: 200px auto"><div class="modal-content"><div class="block block-themed block-transparent remove-margin-b"><div class="block-header bg-primary-dark"><ul class="block-options"><li><button data-dismiss="modal" type="button"><i class="si si-close"></i></button></li></ul><h3 class="block-title">Terms &amp; Conditions</h3></div><div class="block-content"><p id="modal-msg">Dolor posuere </p></div></div><div class="modal-footer"><button class="btn btn-sm btn-default btn-com" type="button" data-dismiss="modal">Close</button><button class="btn btn-sm btn-primary btn-com" type="button" data-dismiss="modal"><i class="fa fa-check"></i> Ok</button></div></div></div>        </div>');
-        $('body').append($dom);
-        var $modal = $("#modal-fadein");
-        $modal.css("display", 'block');
-        $modal.attr("aria-hidden", 'false');
-        $modal.addClass("in");
-
-        $("#modal-msg").html(msg);
-        $dom.find(".btn-com").on("click", function () {
-            var $btn = $(this);
-            setTimeout(function () {
-                if( $btn.index() == 1 && typeof(onHideHandler) == 'function' ){
-                    onHideHandler();
-                }
-            }, 200);
-            $dom.remove();
-        });
-    }
-
 });
 
 //检查字符长度   中文算两个 英文算一个
 
-function WidthCheck(str, maxLen){
+function WidthCheck(str, maxLen) {
     var w = 0;
     var tempCount = 0;
-    for (var i=0; i<str.value.length; i++) {
+    for (var i = 0; i < str.value.length; i++) {
 
         var c = str.value.charCodeAt(i);
 
-        if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+        if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
             w++;
         }
         else {
-            w+=2;
+            w += 2;
         }
         if (w > maxLen) {
-            str.value = str.value.substr(0,i);
+            str.value = str.value.substr(0, i);
             break;
         }
     }
 }
 
+/***
+ * 确认框
+ * @param msg
+ * @param onHideHandler
+ */
+window.swalConfirm = function (msg, onHideHandler) {
+    swal({
+        title: 'Are you sure?',
+        text: msg,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d26a5c',
+        confirmButtonText: 'Yes, do it!',
+        html: false,
+        preConfirm: function () {
+            return new Promise(function (resolve) {
+                setTimeout(function () {
+                    resolve();
+                }, 50);
+            });
+        }
+    }).then(function (result) {
+        if (result.value) {
+            // swal('Deleted!', 'Your imaginary file has been deleted.', 'success');
+            if (typeof(onHideHandler) == 'function') {
+                onHideHandler();
+            }
+        } else if (result.dismiss === 'cancel') {
+            swal('Cancelled', '您的操作已取消 :)', 'error');
+        }
+    });
+}
+
+/***
+ * 消息弹窗
+ * @param msg
+ * @param onHideHandler
+ * @param type
+ */
+window.swalAlert = function (msg, onHideHandler, type) {
+    if (type == 'success') {
+        swal('Success', msg, 'success').then(function () {
+            if (typeof(onHideHandler) == 'function') {
+                onHideHandler();
+            }
+        });
+    } else if (type == 'error') {
+        swal('抱歉...', msg, 'error').then(function () {
+            if (typeof(onHideHandler) == 'function') {
+                onHideHandler();
+            }
+        });
+    } else {
+        swal(msg).then(function () {
+            if (typeof(onHideHandler) == 'function') {
+                onHideHandler();
+            }
+        });
+    }
+}
+/***
+ * 消息通知
+ * @param msg
+ * @param onHideHandler
+ * @param type
+ */
+window.swalNotify = function (msg, onHideHandler, type) {
+    switch (type) {
+        case 'info':
+            var icon = 'fa fa-info-circle';
+            break;
+        case 'success':
+            var icon = 'fa fa-check';
+            break;
+        case 'error':
+            var icon = 'fa fa-times';
+            type = 'danger';
+            break;
+    }
+
+    jQuery.notify({
+            icon: icon || '',
+            message: msg,
+            url: ''
+        },
+        {
+            element: 'body',
+            type: type || 'info',
+            allow_dismiss: true,
+            newest_on_top: true,
+            showProgressbar: false,
+            placement: {
+                from: 'top',
+                align: 'center'
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1033,
+            delay: 2000,
+            timer: 500,
+            animate: {
+                enter: 'animated fadeIn',
+                exit: 'animated fadeOutDown'
+            }
+        });
+
+    setTimeout(function () {
+        if (typeof(onHideHandler) == 'function') {
+            onHideHandler();
+        }
+    }, 3000)
+}
+
+/***
+ * 加载框
+ */
+window.swalLoad = function () {
+    App.loader('show');
+}
+
+/***
+ * 取消加载框
+ */
+window.swalLoadOver = function () {
+    App.loader('hide')
+}
 
 
 

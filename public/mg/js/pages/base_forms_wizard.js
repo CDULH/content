@@ -5,7 +5,7 @@
  */
 
 var BaseFormWizard = function() {
-    // Init simple wizard, for more examples you can check out http://vadimg.com/twitter-bootstrap-wizard-example/
+    // Init simple wizard, for more examples you can check out https://github.com/VinceG/twitter-bootstrap-wizard
     var initWizardSimple = function(){
         jQuery('.js-wizard-simple').bootstrapWizard({
             'tabClass': '',
@@ -42,7 +42,8 @@ var BaseFormWizard = function() {
         });
     };
 
-    // Init wizards with validation, for more examples you can check out http://vadimg.com/twitter-bootstrap-wizard-example/
+    // Init wizards with validation, for more examples you can check out https://github.com/VinceG/twitter-bootstrap-wizard
+    // and https://github.com/jzaefferer/jquery-validation
     var initWizardValidation = function(){
         // Get forms
         var $form1 = jQuery('.js-form1');
@@ -121,7 +122,7 @@ var BaseFormWizard = function() {
             errorClass: 'help-block text-right animated fadeInDown',
             errorElement: 'div',
             errorPlacement: function(error, e) {
-                jQuery(e).parents('.form-group .form-material').append(error);
+                jQuery(e).parents('.form-group > div').append(error);
             },
             highlight: function(e) {
                 jQuery(e).closest('.form-group').removeClass('has-error').addClass('has-error');

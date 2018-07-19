@@ -11,7 +11,7 @@ var BasePagesLogin = function() {
             errorClass: 'help-block text-right animated fadeInDown',
             errorElement: 'div',
             errorPlacement: function(error, e) {
-                jQuery(e).parents('.form-group .form-material').append(error);
+                jQuery(e).parents('.form-group > div').append(error);
             },
             highlight: function(e) {
                 jQuery(e).closest('.form-group').removeClass('has-error').addClass('has-error');

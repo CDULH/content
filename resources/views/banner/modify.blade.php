@@ -7,8 +7,6 @@
 	@endphp
 @endsection
 @section("content")
-	<link rel="stylesheet" href="/mg/js/plugins/summernote/summernote.min.css">
-	<link rel="stylesheet" href="/mg/js/plugins/summernote/summernote-bs3.min.css">
 	<main id="main-container">
 		<div class="content bg-gray-lighter">
 			<div class="row items-push">
@@ -56,10 +54,11 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-md-2 control-label">地址<span class="text-danger">*</span></label>
+							<label class="col-md-2 control-label">图片<span class="text-danger">*</span></label>
 							<div class="col-md-4">
-								<input class="form-control val-username" type="text" placeholder="不能为空" name="path"
-									   value="{{$data->path or ''}}">
+								<input class="form-control val-username" type="hidden" placeholder="不能为空" name="file_id"
+									   value="{{$data->file_id or ''}}">
+								
 							</div>
 						</div>
 						
@@ -78,10 +77,6 @@
 @endsection
 
 @section("footer_js")
-	<script src="/mg/js/plugins/summernote/summernote.min.js"></script>
 	<script>
-        $(function () {
-            App.initHelpers(['summernote']);
-        });
 	</script>
 @endsection

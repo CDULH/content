@@ -30,6 +30,7 @@
 					<div class="push-30 form-inline">
 						<a class="btn btn-sm btn-default" data-toggle="tooltip"
 						   href="{{url('admin/banner/modify')}}">编辑{{$title}}</a>
+						<button class="js-swal btn btn-default" href="">编辑</button>
 						<span style="display:inline-block; width:20px; text-align:center; color:#ddd;">|</span>
 						<select class="form-control input-sm"
 								onchange="location.href='{$url}?machine_state='+this.value">
@@ -55,7 +56,7 @@
 								<tr class="item-row-{$item.id}">
 									<td>{{$item->id}}</td>
 									<td>{{$item->title}}</td>
-									<td>{{$item->path}}</td>
+									<td>{{$item->file?$item->file->path:''}}</td>
 									<td>{{$item->sort}}</td>
 									<td>{{$channels[$item->channel]}}</td>
 									<td>{{$item->created_at}}</td>
@@ -87,11 +88,11 @@
         $(".del").click(function () {
 
             var url = $(this).data("url");
-            if (!confirm('您确定要操作【删除】吗？')) {
-                return false;
-            }
-            location.href = url;
-            return false;
+            swalConfirm('您确定要删除吗', function () {
+                // location.href = url;
+                swalLoad();
+            });
         });
+        
 	</script>
 @endsection

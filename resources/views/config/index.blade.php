@@ -82,11 +82,9 @@
         $(".del").click(function () {
 
             var url = $(this).data("url");
-            if (!confirm('您确定要操作【删除】吗？')) {
-                return false;
-            }
-            location.href = url;
-            return false;
+            swalConfirm('您确定要删除吗', function () {
+                location.href = url;
+            });
         });
 	</script>
 @endsection

@@ -174,30 +174,6 @@
                 checkInput();
             });
 
-
-            /*$('form[name="permission-form"]').submit(function(){
-				checkInput();
-				$('form[name="permission-form"]').submit();
-				/*
-				var valueArr = [],
-					$inputs = $('.child-content input');
-				
-				$inputs.each(function(){
-					if( this.checked ){
-						valueArr.push( this.value );
-					}
-				});
-				
-				if( $inputs.length == valueArr.length ){
-					//all selected
-					
-				}else{
-				
-				}
-				$('input[name="permissions"]').val( valueArr.length>0 ? ','+valueArr.join(',')+',' : '' );
-				return false;
-			});*/
-            checkInput
         });
 	</script>
 @endsection

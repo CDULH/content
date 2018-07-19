@@ -7,8 +7,6 @@
 	@endphp
 @endsection
 @section("content")
-	<link rel="stylesheet" href="/mg/js/plugins/summernote/summernote.min.css">
-	<link rel="stylesheet" href="/mg/js/plugins/summernote/summernote-bs3.min.css">
 	<main id="main-container">
 		<div class="content bg-gray-lighter">
 			<div class="row items-push">
@@ -91,10 +89,4 @@
 @endsection
 
 @section("footer_js")
-	<script src="/mg/js/plugins/summernote/summernote.min.js"></script>
-	<script>
-        $(function () {
-            App.initHelpers(['summernote']);
-        });
-	</script>
 @endsection

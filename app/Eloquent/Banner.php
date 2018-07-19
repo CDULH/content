@@ -17,12 +17,16 @@ class Banner extends Base
 		
 		$banner->title   = $data[ 'title' ];
 		$banner->sort    = $data[ 'sort' ];
-		$banner->path    = $data[ 'path' ];
+		$banner->file_id    = $data[ 'file_id' ];
 		$banner->channel = $data[ 'channel' ];
 		
 		$re = $banner->save();
 		if ( !$re ) return false;
 		
 		return true;
+	}
+	
+	public function file(){
+		return $this->hasOne("App\Eloquent\File", 'id', 'file_id');
 	}
 }

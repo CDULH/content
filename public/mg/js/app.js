@@ -20,7 +20,7 @@ var App = function() {
      *********************************************************************************************
      */
 
-    // achine Interface init
+    // User Interface init
     var uiInit = function() {
         // Set variables
         $lHtml              = jQuery('html');
@@ -77,7 +77,7 @@ var App = function() {
         // Init sidebar and side overlay custom scrolling
         uiHandleScroll('init');
 
-        // Init transparent header functionality (solid on scroll - used in frontend)
+        // Init transparent header functionality (solid on scroll)
         if ($lPage.hasClass('header-navbar-fixed') && $lPage.hasClass('header-navbar-transparent')) {
             jQuery(window).on('scroll', function(){
                 if (jQuery(this).scrollTop() > 20) {
@@ -136,8 +136,8 @@ var App = function() {
             // If screen width is greater than 991 pixels and .side-scroll is added to #page-container
             if ($windowW > 991 && $lPage.hasClass('side-scroll')) {
                 // Turn scroll lock off (sidebar and side overlay - slimScroll will take care of it)
-                jQuery($lSidebar).scrollLock('off');
-                jQuery($lSideOverlay).scrollLock('off');
+                jQuery($lSidebar).scrollLock('disable');
+                jQuery($lSideOverlay).scrollLock('disable');
 
                 // If sidebar scrolling does not exist init it..
                 if ($lSidebarScroll.length && (!$lSidebarScroll.parent('.slimScrollDiv').length)) {
@@ -178,8 +178,8 @@ var App = function() {
                 }
             } else {
                 // Turn scroll lock on (sidebar and side overlay)
-                jQuery($lSidebar).scrollLock();
-                jQuery($lSideOverlay).scrollLock();
+                jQuery($lSidebar).scrollLock('enable');
+                jQuery($lSideOverlay).scrollLock('enable');
 
                 // If sidebar scrolling exists destroy it..
                 if ($lSidebarScroll.length && $lSidebarScroll.parent('.slimScrollDiv').length) {
@@ -303,9 +303,6 @@ var App = function() {
     var uiNav = function() {
         // When a submenu link is clicked
         jQuery('[data-toggle="nav-submenu"]').on('click', function(e){
-            // Stop default behaviour
-            e.stopPropagation();
-
             // Get link
             var $link = jQuery(this);
 
@@ -328,6 +325,8 @@ var App = function() {
             if ($lHtml.hasClass('no-focus')) {
                 $link.blur();
             }
+
+            return false;
         });
     };
 
@@ -338,7 +337,7 @@ var App = function() {
 
         // Call blocks API on option button click
         jQuery('[data-toggle="block-option"]').on('click', function(){
-            uiBlocksApi(jQuery(this).parents('.block'), jQuery(this).data('action'));
+            uiBlocksApi(jQuery(this).closest('.block'), jQuery(this).data('action'));
         });
     };
 
@@ -379,7 +378,11 @@ var App = function() {
                         $elBlock.toggleClass('block-opt-fullscreen');
 
                         // Enable/disable scroll lock to block
-                        $elBlock.hasClass('block-opt-fullscreen') ? jQuery($elBlock).scrollLock() : jQuery($elBlock).scrollLock('off');
+                        if ($elBlock.hasClass('block-opt-fullscreen')) {
+                            jQuery($elBlock).scrollLock('enable');
+                        } else {
+                            jQuery($elBlock).scrollLock('disable');
+                        }
 
                         // Update block option icon
                         if ($btnFullscreen.length) {
@@ -398,7 +401,7 @@ var App = function() {
                         $elBlock.addClass('block-opt-fullscreen');
 
                         // Enable scroll lock to block
-                        jQuery($elBlock).scrollLock();
+                        jQuery($elBlock).scrollLock('enable');
 
                         // Update block option icon
                         if ($btnFullscreen.length) {
@@ -411,7 +414,7 @@ var App = function() {
                         $elBlock.removeClass('block-opt-fullscreen');
 
                         // Disable scroll lock to block
-                        jQuery($elBlock).scrollLock('off');
+                        jQuery($elBlock).scrollLock('disable');
 
                         // Update block option icon
                         if ($btnFullscreen.length) {
@@ -491,9 +494,11 @@ var App = function() {
             var $input  = jQuery(this);
             var $parent = $input.parent('.form-material');
 
-            if ($input.val()) {
-                $parent.addClass('open');
-            }
+            setTimeout(function() {
+                if ($input.val() ) {
+                    $parent.addClass('open');
+                }
+            }, 150);
 
             $input.on('change', function(){
                 if ($input.val()) {
@@ -508,6 +513,30 @@ var App = function() {
     // Set active color themes functionality
     var uiHandleTheme = function() {
         var $cssTheme = jQuery('#css-theme');
+        var $cookies  = $lPage.hasClass('enable-cookies') ? true : false;
+
+        // If cookies are enabled
+        if ($cookies) {
+            var $theme = Cookies.get('colorTheme') || false;
+
+            // Update color theme
+            if ($theme) {
+                if ($theme === 'default') {
+                    if ($cssTheme.length) {
+                        $cssTheme.remove();
+                    }
+                } else {
+                    if ($cssTheme.length) {
+                        $cssTheme.attr('href', $theme);
+                    } else {
+                        jQuery('#css-main')
+                            .after('<link rel="stylesheet" id="css-theme" href="' + $theme + '">');
+                    }
+                }
+            }
+
+            $cssTheme = jQuery('#css-theme');
+        }
 
         // Set the active color theme link as active
         jQuery('[data-toggle="theme"][data-theme="' + ($cssTheme.length ? $cssTheme.attr('href') : 'default') + '"]')
@@ -543,18 +572,24 @@ var App = function() {
             }
 
             $cssTheme = jQuery('#css-theme');
+
+            // If cookies are enabled, save the new active color theme
+            if ($cookies) {
+                Cookies.set('colorTheme', $theme, { expires: 7 });
+            }
         });
     };
 
     // Scroll to element animation helper
     var uiScrollTo = function() {
         jQuery('[data-toggle="scroll-to"]').on('click', function(){
-            var $this   = jQuery(this);
-            var $target = $this.data('target');
-            var $speed  = $this.data('speed') ? $this.data('speed') : 1000;
+            var $this         = jQuery(this);
+            var $target       = $this.data('target');
+            var $speed        = $this.data('speed') || 1000;
+            var $headerHeight = ($lHeader.length && $lPage.hasClass('header-navbar-fixed')) ? $lHeader.outerHeight() : 0;
 
             jQuery('html, body').animate({
-                scrollTop: jQuery($target).offset().top
+                scrollTop: jQuery($target).offset().top - $headerHeight
             }, $speed);
         });
     };
@@ -562,26 +597,46 @@ var App = function() {
     // Toggle class helper
     var uiToggleClass = function() {
         jQuery('[data-toggle="class-toggle"]').on('click', function(){
-            var $el = jQuery(this);
+            var $this = jQuery(this);
 
-            jQuery($el.data('target').toString()).toggleClass($el.data('class').toString());
+            jQuery($this.data('target').toString()).toggleClass($this.data('class').toString());
 
             if ($lHtml.hasClass('no-focus')) {
-                $el.blur();
+                $this.blur();
             }
         });
     };
 
     // Add the correct copyright year
     var uiYearCopy = function() {
-        var $date       = new Date();
-        var $yearCopy   = jQuery('.js-year-copy');
+        var $date     = new Date();
+        var $yearCopy = jQuery('.js-year-copy');
+        var $baseYear = ($yearCopy.length > 0 && $yearCopy.html().length > 0) ? $yearCopy.html() : $date.getFullYear();
 
-        if ($date.getFullYear() === 2015) {
-            $yearCopy.html('2015');
-        } else {
-            $yearCopy.html('2015-' + $date.getFullYear().toString().substr(2,2));
+        if (parseInt($baseYear) >= $date.getFullYear()) {
+            $yearCopy.text($date.getFullYear());
+        } else {
+            $yearCopy.text($baseYear + '-' + $date.getFullYear().toString().substr(2, 2));
+        }
+    };
+
+    // Manage page loading screen functionality
+    var uiLoader = function($mode) {
+        var $lpageLoader = jQuery('#page-loader');
+
+        if ($mode === 'show') {
+            if ($lpageLoader.length) {
+                $lpageLoader.fadeIn(250);
+            } else {
+                $lBody.prepend('<div id="page-loader"></div>');
+            }
+        } else if ($mode === 'hide') {
+            if ($lpageLoader.length) {
+                $lpageLoader.fadeOut(250);
+            }
         }
+
+        return false;
     };
 
     /*
@@ -625,58 +680,63 @@ var App = function() {
 
     // Table sections functionality
     var uiHelperTableToolsSections = function(){
-        var $table      = jQuery('.js-table-sections');
-        var $tableRows  = jQuery('.js-table-sections-header > tr', $table);
+        // For each table
+        jQuery('.js-table-sections').each(function(){
+            var $table = jQuery(this);
 
-        // When a row is clicked in tbody.js-table-sections-header
-        $tableRows.click(function(e) {
-            var $row    = jQuery(this);
-            var $tbody  = $row.parent('tbody');
+            // When a row is clicked in tbody.js-table-sections-header
+            jQuery('.js-table-sections-header > tr', $table).on('click', function(e) {
+                var $row    = jQuery(this);
+                var $tbody  = $row.parent('tbody');
 
-            if (! $tbody.hasClass('open')) {
-                jQuery('tbody', $table).removeClass('open');
-            }
+                if (! $tbody.hasClass('open')) {
+                    jQuery('tbody', $table).removeClass('open');
+                }
 
-            $tbody.toggleClass('open');
+                $tbody.toggleClass('open');
+            });
         });
     };
 
     // Checkable table functionality
     var uiHelperTableToolsCheckable = function() {
-        var $table = jQuery('.js-table-checkable');
+        // For each table
+        jQuery('.js-table-checkable').each(function(){
+            var $table = jQuery(this);
 
-        // When a checkbox is clicked in thead
-        jQuery('thead input:checkbox', $table).click(function() {
-            var $checkedStatus = jQuery(this).prop('checked');
+            // When a checkbox is clicked in thead
+            jQuery('thead input:checkbox', $table).on('click', function() {
+                var $checkedStatus = jQuery(this).prop('checked');
 
-            // Check or uncheck all checkboxes in tbody
-            jQuery('tbody input:checkbox', $table).each(function() {
+                // Check or uncheck all checkboxes in tbody
+                jQuery('tbody input:checkbox', $table).each(function() {
+                    var $checkbox = jQuery(this);
+
+                    $checkbox.prop('checked', $checkedStatus);
+                    uiHelperTableToolscheckRow($checkbox, $checkedStatus);
+                });
+            });
+
+            // When a checkbox is clicked in tbody
+            jQuery('tbody input:checkbox', $table).on('click', function() {
                 var $checkbox = jQuery(this);
 
-                $checkbox.prop('checked', $checkedStatus);
-                uiHelperTableToolscheckRow($checkbox, $checkedStatus);
+                uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'));
             });
-        });
 
-        // When a checkbox is clicked in tbody
-        jQuery('tbody input:checkbox', $table).click(function() {
-            var $checkbox = jQuery(this);
+            // When a row is clicked in tbody
+            jQuery('tbody > tr', $table).on('click', function(e) {
+                if (e.target.type !== 'checkbox'
+                        && e.target.type !== 'button'
+                        && e.target.tagName.toLowerCase() !== 'a'
+                        && !jQuery(e.target).parent('label').length) {
+                    var $checkbox       = jQuery('input:checkbox', this);
+                    var $checkedStatus  = $checkbox.prop('checked');
 
-            uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'));
-        });
-
-        // When a row is clicked in tbody
-        jQuery('tbody > tr', $table).click(function(e) {
-            if (e.target.type !== 'checkbox'
-                    && e.target.type !== 'button'
-                    && e.target.tagName.toLowerCase() !== 'a'
-                    && !jQuery(e.target).parent('label').length) {
-                var $checkbox       = jQuery('input:checkbox', this);
-                var $checkedStatus  = $checkbox.prop('checked');
-
-                $checkbox.prop('checked', ! $checkedStatus);
-                uiHelperTableToolscheckRow($checkbox, ! $checkedStatus);
-            }
+                    $checkbox.prop('checked', ! $checkedStatus);
+                    uiHelperTableToolscheckRow($checkbox, ! $checkedStatus);
+                }
+            });
         });
     };
 
@@ -702,19 +762,16 @@ var App = function() {
     var uiHelperAppear = function(){
         // Add a specific class on elements (when they become visible on scrolling)
         jQuery('[data-toggle="appear"]').each(function(){
-            var $windowW    = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            var $this       = jQuery(this);
-            var $class      = $this.data('class') ? $this.data('class') : 'animated fadeIn';
-            var $offset     = $this.data('offset') ? $this.data('offset') : 0;
-            var $timeout    = ($lHtml.hasClass('ie9') || $windowW < 992) ? 0 : ($this.data('timeout') ? $this.data('timeout') : 0);
+            var $windowW = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            var $this    = jQuery(this);
 
             $this.appear(function() {
                 setTimeout(function(){
                     $this
                         .removeClass('visibility-hidden')
-                        .addClass($class);
-                }, $timeout);
-            },{accY: $offset});
+                        .addClass($this.data('class') || 'animated fadeIn');
+                }, ($lHtml.hasClass('ie9') || $windowW < 992) ? 0 : ($this.data('timeout') || 0));
+            },{accY: $this.data('offset') || 0});
         });
     };
 
@@ -727,21 +784,46 @@ var App = function() {
     var uiHelperAppearCountTo = function(){
         // Init counter functionality
         jQuery('[data-toggle="countTo"]').each(function(){
-            var $this       = jQuery(this);
-            var $after      = $this.data('after');
-            var $speed      = $this.data('speed') ? $this.data('speed') : 1500;
-            var $interval   = $this.data('interval') ? $this.data('interval') : 15;
+            var $this   = jQuery(this);
+            var $after  = $this.data('after');
+            var $before = $this.data('before');
 
             $this.appear(function() {
                 $this.countTo({
-                    speed: $speed,
-                    refreshInterval: $interval,
+                    speed: $this.data('speed') || 1500,
+                    refreshInterval: $this.data('interval') || 15,
                     onComplete: function() {
                         if($after) {
                             $this.html($this.html() + $after);
+                        } else if ($before) {
+                            $this.html($before + $this.html());
                         }
                     }
                 });
+            });
+        });
+    };
+
+    /*
+     * jQuery SlimScroll, for more examples you can check out http://rocha.la/jQuery-slimScroll
+     *
+     * App.initHelper('slimscroll');
+     *
+     */
+    var uiHelperSlimscroll = function(){
+        // Init slimScroll functionality
+        jQuery('[data-toggle="slimscroll"]').each(function(){
+            var $this = jQuery(this);
+
+            $this.slimScroll({
+                height: $this.data('height') || '200px',
+                size: $this.data('size') || '5px',
+                position: $this.data('position') || 'right',
+                color: $this.data('color') || '#000',
+                alwaysVisible: $this.data('always-visible') ? true : false,
+                railVisible: $this.data('rail-visible') ? true : false,
+                railColor: $this.data('rail-color') || '#999',
+                railOpacity: $this.data('rail-opacity') || .3
             });
         });
     };
@@ -795,10 +877,14 @@ var App = function() {
         CKEDITOR.disableAutoInline = true;
 
         // Init inline text editor
-        CKEDITOR.inline('js-ckeditor-inline');
+        if (jQuery('#js-ckeditor-inline').length) {
+            CKEDITOR.inline('js-ckeditor-inline');
+        }
 
         // Init full text editor
-        CKEDITOR.replace('js-ckeditor');
+        if (jQuery('#js-ckeditor').length) {
+            CKEDITOR.replace('js-ckeditor');
+        }
     };
 
     /*
@@ -814,22 +900,10 @@ var App = function() {
         });
 
         // Init full text editor
-        jQuery('.js-summernote').each(function(){
-        	var $this = $(this),
-        		apipath = $this.data('ossuppath');
-        	$this.summernote({
-                height: 350,
-                minHeight: null,
-                maxHeight: null,
-                onImageUpload: function(files) {
-        			ossupfile(apipath, files[0], function(state, path){
-        				//editor.insertImage(welEditable, path);
-        				var image = document.createElement("img");
-        				image.src = path;
-        				$this.summernote('insertNode', image);
-        			});
-                }
-            });
+        jQuery('.js-summernote').summernote({
+            height: 350,
+            minHeight: null,
+            maxHeight: null
         });
     };
 
@@ -842,57 +916,36 @@ var App = function() {
     var uiHelperSlick = function(){
         // Get each slider element (with .js-slider class)
         jQuery('.js-slider').each(function(){
-            var $slider = jQuery(this);
-
-            // Get each slider's init data
-            var $sliderArrows       = $slider.data('slider-arrows') ? $slider.data('slider-arrows') : false;
-            var $sliderDots         = $slider.data('slider-dots') ? $slider.data('slider-dots') : false;
-            var $sliderNum          = $slider.data('slider-num') ? $slider.data('slider-num') : 1;
-            var $sliderAuto         = $slider.data('slider-autoplay') ? $slider.data('slider-autoplay') : false;
-            var $sliderAutoSpeed    = $slider.data('slider-autoplay-speed') ? $slider.data('slider-autoplay-speed') : 3000;
+            var $this = jQuery(this);
 
             // Init slick slider
-            $slider.slick({
-                arrows: $sliderArrows,
-                dots: $sliderDots,
-                slidesToShow: $sliderNum,
-                autoplay: $sliderAuto,
-                autoplaySpeed: $sliderAutoSpeed
+            $this.slick({
+                arrows: $this.data('slider-arrows') || false,
+                dots: $this.data('slider-dots') || false,
+                slidesToShow: $this.data('slider-num') || 1,
+                autoplay: $this.data('slider-autoplay') || false,
+                autoplaySpeed: $this.data('slider-autoplay-speed') || 3000
             });
         });
     };
 
     /*
-     * Bootstrap Datepicker init, for more examples you can check out https://github.com/eternicode/bootstrap-datepicker
+     * Bootstrap Datepicker init, for more examples you can check out https://github.com/uxsolutions/bootstrap-datepicker
      *
      * App.initHelper('datepicker');
      *
      */
     var uiHelperDatepicker = function(){
         // Init datepicker (with .js-datepicker and .input-daterange class)
-        jQuery('.js-datepicker').add('.input-daterange').datepicker({
-        	format: 'yyyy-mm-dd',
-        	weekStart: 1,
-            autoclose: true,
-            todayHighlight: true
-        });
-    };
-    
-    /*
-     * App.initHelper('datetimepicker');
-     */
-    var uiHelperDatetimepicker = function(){
-        jQuery('.js-datetimepicker').datetimepicker({
-            format: 'yyyy-mm-dd',
-        	language: 'zh-CN',
-            autoclose: true,
-            minView: 2
-        });
-        jQuery('.js-datetimepicker-minute').datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',
-        	language: 'zh-CN',
-            autoclose: true,
-            minuteStep: 10
+        jQuery('.js-datepicker').add('.input-daterange').each(function(){
+            var $this = jQuery(this);
+
+            $this.datepicker({
+                weekStart: 1,
+                autoclose: true,
+                todayHighlight: true,
+                orientation: $this.data('orientation') || 'auto'
+            });
         });
     };
 
@@ -905,16 +958,12 @@ var App = function() {
     var uiHelperColorpicker = function(){
         // Get each colorpicker element (with .js-colorpicker class)
         jQuery('.js-colorpicker').each(function(){
-            var $colorpicker = jQuery(this);
-
-            // Get each colorpicker's init data
-            var $colorpickerMode    = $colorpicker.data('colorpicker-mode') ? $colorpicker.data('colorpicker-mode') : 'hex';
-            var $colorpickerinline  = $colorpicker.data('colorpicker-inline') ? true : false;
+            var $this = jQuery(this);
 
             // Init colorpicker
-            $colorpicker.colorpicker({
-                'format': $colorpickerMode,
-                'inline': $colorpickerinline
+            $this.colorpicker({
+                'format': $this.data('colorpicker-mode') || 'hex',
+                'inline': $this.data('colorpicker-inline') ? true : false
             });
         });
     };
@@ -937,6 +986,7 @@ var App = function() {
         jQuery('.js-masked-taxid').mask('99-9999999');
         jQuery('.js-masked-ssn').mask('999-99-9999');
         jQuery('.js-masked-pkey').mask('a*-999-a999');
+        jQuery('.js-masked-time').mask('99:99');
     };
 
     /*
@@ -987,32 +1037,26 @@ var App = function() {
     var uiHelperNotify = function(){
         // Init notifications (with .js-notify class)
         jQuery('.js-notify').on('click', function(){
-            var $notify         = jQuery(this);
-            var $notifyMsg      = $notify.data('notify-message');
-            var $notifyType     = $notify.data('notify-type') ? $notify.data('notify-type') : 'info';
-            var $notifyFrom     = $notify.data('notify-from') ? $notify.data('notify-from') : 'top';
-            var $notifyAlign    = $notify.data('notify-align') ? $notify.data('notify-align') : 'right';
-            var $notifyIcon     = $notify.data('notify-icon') ? $notify.data('notify-icon') : '';
-            var $notifyUrl      = $notify.data('notify-url') ? $notify.data('notify-url') : '';
+            var $this = jQuery(this);
 
             jQuery.notify({
-                    icon: $notifyIcon,
-                    message: $notifyMsg,
-                    url: $notifyUrl
+                    icon: $this.data('notify-icon') || '',
+                    message: $this.data('notify-message'),
+                    url: $this.data('notify-url') || ''
                 },
                 {
                     element: 'body',
-                    type: $notifyType,
+                    type: $this.data('notify-type') || 'info',
                     allow_dismiss: true,
                     newest_on_top: true,
                     showProgressbar: false,
                     placement: {
-                        from: $notifyFrom,
-                        align: $notifyAlign
+                        from: $this.data('notify-from') || 'top',
+                        align: $this.data('notify-align') || 'right'
                     },
                     offset: 20,
                     spacing: 10,
-                    z_index: 1031,
+                    z_index: 1033,
                     delay: 5000,
                     timer: 1000,
                     animate: {
@@ -1031,9 +1075,10 @@ var App = function() {
      */
     var uiHelperDraggableItems = function(){
         // Init draggable items functionality (with .js-draggable-items class)
-        jQuery('.js-draggable-items').sortable({
+        jQuery('.js-draggable-items > .draggable-column').sortable({
             connectWith: '.draggable-column',
             items: '.draggable-item',
+            dropOnEmpty: true,
             opacity: .75,
             handle: '.draggable-handler',
             placeholder: 'draggable-placeholder',
@@ -1055,31 +1100,225 @@ var App = function() {
      */
     var uiHelperEasyPieChart = function(){
         // Init Easy Pie Charts (with .js-pie-chart class)
-        jQuery('.js-pie-chart').easyPieChart({
-            barColor: jQuery(this).data('bar-color') ? jQuery(this).data('bar-color') : '#777777',
-            trackColor: jQuery(this).data('track-color') ? jQuery(this).data('track-color') : '#eeeeee',
-            lineWidth: jQuery(this).data('line-width') ? jQuery(this).data('line-width') : 3,
-            size: jQuery(this).data('size') ? jQuery(this).data('size') : '80',
-            animate: 750,
-            scaleColor: jQuery(this).data('scale-color') ? jQuery(this).data('scale-color') : false
+        jQuery('.js-pie-chart').each(function(){
+            var $this = jQuery(this);
+
+            $this.easyPieChart({
+                barColor: $this.data('bar-color') || '#777777',
+                trackColor: $this.data('track-color') || '#eeeeee',
+                lineWidth: $this.data('line-width') || 3,
+                size: $this.data('size') || '80',
+                animate: 750,
+                scaleColor: $this.data('scale-color') || false
+            });
         });
     };
 
+    /*
+     * Bootstrap Maxlength, for more examples you can check out https://github.com/mimo84/bootstrap-maxlength
+     *
+     * App.initHelper('maxlength');
+     *
+     */
+    var uiHelperMaxlength = function(){
+        // Init Bootstrap Maxlength (with .js-maxlength class)
+        jQuery('.js-maxlength').each(function(){
+            var $this = jQuery(this);
+
+            $this.maxlength({
+                alwaysShow: $this.data('always-show') ? true : false,
+                threshold: $this.data('threshold') || 10,
+                warningClass: $this.data('warning-class') || 'label label-warning',
+                limitReachedClass: $this.data('limit-reached-class') || 'label label-danger',
+                placement: $this.data('placement') || 'bottom',
+                preText: $this.data('pre-text') || '',
+                separator: $this.data('separator') || '/',
+                postText: $this.data('post-text') || ''
+            });
+        });
+    };
+
+    /*
+     * Bootstrap Datetimepicker, for more examples you can check out https://github.com/Eonasdan/bootstrap-datetimepicker
+     *
+     * App.initHelper('datetimepicker');
+     *
+     */
+    var uiHelperDatetimepicker = function(){
+        // Init Bootstrap Datetimepicker (with .js-datetimepicker class)
+        jQuery('.js-datetimepicker').each(function(){
+            var $this = jQuery(this);
+
+            $this.datetimepicker({
+                format: $this.data('format') || false,
+                useCurrent: $this.data('use-current') || false,
+                locale: moment.locale('' + ($this.data('locale') || '') +''),
+                showTodayButton: $this.data('show-today-button') || false,
+                showClear: $this.data('show-clear') || false,
+                showClose: $this.data('show-close') || false,
+                sideBySide: $this.data('side-by-side') || false,
+                inline: $this.data('inline') || false,
+                icons: {
+                    time: 'si si-clock',
+                    date: 'si si-calendar',
+                    up: 'si si-arrow-up',
+                    down: 'si si-arrow-down',
+                    previous: 'si si-arrow-left',
+                    next: 'si si-arrow-right',
+                    today: 'si si-size-actual',
+                    clear: 'si si-trash',
+                    close: 'si si-close'
+                }
+            });
+        });
+    };
+
+    /*
+     * Ion Range Slider, for more examples you can check out https://github.com/IonDen/ion.rangeSlider
+     *
+     * App.initHelper('rangeslider');
+     *
+     */
+    var uiHelperRangeslider = function(){
+        // Init Ion Range Slider (with .js-rangeslider class)
+        jQuery('.js-rangeslider').each(function(){
+            var $this = jQuery(this);
+
+            $this.ionRangeSlider({
+                input_values_separator: ';'
+            });
+        });
+    };
+
+    /*
+     * SimpleMDE init, for more examples you can check out https://github.com/NextStepWebs/simplemde-markdown-editor
+     *
+     * App.initHelper('simplemde');
+     *
+     */
+    var uiHelperSimpleMDE = function(){
+        // Init markdown editor (with .js-simplemde class)
+        jQuery('.js-simplemde').each(function(){
+            var $this = jQuery(this);
+
+            new SimpleMDE({ element: $this[0] });
+        });
+    };
+
+    /*
+     * Masonry, for more examples you can check out https://github.com/desandro/masonry
+     *
+     * App.initHelper('masonry');
+     *
+     */
+    var uiHelperMasonry = function(){
+        var $grid = jQuery('.js-masonry');
+
+        // Small layout fixes
+        $lMain.css('overflow-x', 'visible');
+        $lMain.find('.row').css('margin', '0 -14px');
+        jQuery('.js-masonry-item > div').css('min-width', '282px');
+
+        // Init masonry layout (with .js-masonry class)
+        var $masonry = $grid.imagesLoaded(function () {
+            // Init Masonry after all images have loaded
+            $masonry.masonry({
+                itemSelector: '.js-masonry-item',
+                columnWidth: '.js-masonry-sizer',
+                percentPosition: true
+            });
+        });
+    };
+
+    /*
+     * AutoNumeric, for more examples you can check out https://github.com/autoNumeric/autoNumeric
+     *
+     * App.initHelper('autonumeric');
+     *
+     */
+    var uiHelperAutoNumeric = function(){
+        // Init initAutoNumeric functionality
+        if (jQuery('.js-autonumeric-dollar').length > 0 ) {
+            new AutoNumeric.multiple('.js-autonumeric-dollar', AutoNumeric.getPredefinedOptions().NorthAmerican);
+        }
+
+        if (jQuery('.js-autonumeric-euro').length > 0 ) {
+            new AutoNumeric.multiple('.js-autonumeric-euro', AutoNumeric.getPredefinedOptions().French);
+        }
+
+        if (jQuery('.js-autonumeric-pound').length > 0 ) {
+            new AutoNumeric.multiple('.js-autonumeric-pound', AutoNumeric.getPredefinedOptions().British);
+        }
+
+        if (jQuery('.js-autonumeric-franc').length > 0 ) {
+            new AutoNumeric.multiple('.js-autonumeric-franc', AutoNumeric.getPredefinedOptions().Swiss);
+        }
+
+        if (jQuery('.js-autonumeric-yen').length > 0 ) {
+            new AutoNumeric.multiple('.js-autonumeric-yen', AutoNumeric.getPredefinedOptions().Japanese);
+        }
+
+        if (jQuery('.js-autonumeric-yuan').length > 0 ) {
+            new AutoNumeric.multiple('.js-autonumeric-yuan', AutoNumeric.getPredefinedOptions().Chinese);
+        }
+
+        if (jQuery('.js-autonumeric-brl').length > 0 ) {
+            new AutoNumeric.multiple('.js-autonumeric-brl', AutoNumeric.getPredefinedOptions().Brazilian);
+        }
+    };
+
     return {
-        init: function() {
-            // Init all vital functions
-            uiInit();
-            uiLayout();
-            uiNav();
-            uiBlocks();
-            uiForms();
-            uiHandleTheme();
-            uiToggleClass();
-            uiScrollTo();
-            uiYearCopy();
+        init: function($func) {
+            switch ($func) {
+                case 'uiInit':
+                    uiInit();
+                    break;
+                case 'uiLayout':
+                    uiLayout();
+                    break;
+                case 'uiNav':
+                    uiNav();
+                    break;
+                case 'uiBlocks':
+                    uiBlocks();
+                    break;
+                case 'uiForms':
+                    uiForms();
+                    break;
+                case 'uiHandleTheme':
+                    uiHandleTheme();
+                    break;
+                case 'uiToggleClass':
+                    uiToggleClass();
+                    break;
+                case 'uiScrollTo':
+                    uiScrollTo();
+                    break;
+                case 'uiYearCopy':
+                    uiYearCopy();
+                    break;
+                case 'uiLoader':
+                    uiLoader('hide');
+                    break;
+                default:
+                    // Init all vital functions
+                    uiInit();
+                    uiLayout();
+                    uiNav();
+                    uiBlocks();
+                    uiForms();
+                    uiHandleTheme();
+                    uiToggleClass();
+                    uiScrollTo();
+                    uiYearCopy();
+                    uiLoader('hide');
+            }
         },
         layout: function($mode) {
             uiLayoutApi($mode);
+        },
+        loader: function($mode) {
+            uiLoader($mode);
         },
         blocks: function($block, $mode) {
             uiBlocksApi($block, $mode);
@@ -1099,6 +1338,9 @@ var App = function() {
                 case 'appear-countTo':
                     uiHelperAppearCountTo();
                     break;
+                case 'slimscroll':
+                    uiHelperSlimscroll();
+                    break;
                 case 'magnific-popup':
                     uiHelperMagnific();
                     break;
@@ -1113,9 +1355,6 @@ var App = function() {
                     break;
                 case 'datepicker':
                     uiHelperDatepicker();
-                    break;
-                case 'datetimepicker':
-                    uiHelperDatetimepicker();
                     break;
                 case 'colorpicker':
                     uiHelperColorpicker();
@@ -1141,6 +1380,24 @@ var App = function() {
                 case 'easy-pie-chart':
                     uiHelperEasyPieChart();
                     break;
+                case 'maxlength':
+                    uiHelperMaxlength();
+                    break;
+                case 'datetimepicker':
+                    uiHelperDatetimepicker();
+                    break;
+                case 'rangeslider':
+                    uiHelperRangeslider();
+                    break;
+                case 'simplemde':
+                    uiHelperSimpleMDE();
+                    break;
+                case 'masonry':
+                    uiHelperMasonry();
+                    break;
+                case 'autonumeric':
+                    uiHelperAutoNumeric();
+                    break;
                 default:
                     return false;
             }
@@ -1157,5 +1414,12 @@ var App = function() {
     };
 }();
 
+// Create an alias for App (you can use OneUI in your pages instead of App if you like)
+var OneUI = App;
+
 // Initialize app when page loads
-jQuery(function(){ App.init(); });
+jQuery(function(){
+    if (typeof angular == 'undefined') {
+        App.init();
+    }
+});

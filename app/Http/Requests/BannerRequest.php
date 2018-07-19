@@ -25,7 +25,7 @@ class BannerRequest extends FormRequest
 	{
 		return [
 			'title' => 'required|alpha',
-			'path' => 'required|alpha',
+			'file_id' => 'required|digits_between:1,10',
 			'sort' => 'required|digits_between:1,5',
 			'channel' => 'required|digits_between:1,2',
 		];

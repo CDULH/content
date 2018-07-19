@@ -4,8 +4,100 @@
 // Overwrite/Extend styles of various JS plugins
 // --------------------------------------------------
 
+// jQuery AutoComplete
+.autocomplete-suggestion b {
+    color: @brand-primary;
+}
+
+// Ion Range Slider
+.irs {
+    &-line {
+        height: 5px;
+        background: #eee;
+        border: none;
+        border-radius: 3px;
+    }
+
+    &-bar {
+        height: 5px;
+        border: none;
+        background: @brand-primary;
+
+        &-edge {
+            height: 5px;
+            border: none;
+            background: @brand-primary;
+            border-radius: 3px 0 0 3px;
+        }
+    }
+
+    &-slider {
+        top: 25px;
+        width: 20px;
+        height: 20px;
+        border: none;
+        background: #fff;
+        border-radius: 50%;
+        .box-shadow(0 1px 5px rgba(0,0,0,.35));
+
+        &:hover {
+            background: #fff;
+            .box-shadow(0 1px 5px rgba(0,0,0,.75));
+        }
+    }
+
+    &-from,
+    &-to,
+    &-single {
+        color: #fff;
+        font-size: 13px;
+        background: @brand-primary;
+    }
+
+    &-grid-pol {
+        background: @brand-primary;
+    }
+}
+
+// jVectorMap
+.jvectormap-tip {
+    padding: 6px 8px;
+    font-family: @font-family-base;
+    background: @brand-darker;
+    border: none;
+    border-radius: 0;
+}
+
+.jvectormap-zoomin,
+.jvectormap-zoomout,
+.jvectormap-goback {
+    left: 15px;
+    padding: 4px;
+    line-height: 15px;
+    background: #555;
+}
+
+.jvectormap-zoomin,
+.jvectormap-zoomout {
+    width: 15px;
+    height: 15px;
+}
+
+.jvectormap-zoomin:hover,
+.jvectormap-zoomout:hover {
+    opacity: .75;
+}
+
+.jvectormap-zoomout {
+    top: 40px;
+}
+
 // Draggable Blocks (jQueryUI)
 .draggable {
+    &-column {
+        min-height: 100px;
+    }
+
     &-handler {
         cursor: move;
     }
@@ -168,6 +260,10 @@ div.tagsinput {
         border-color: @form-border-color;
         .border-bottom-radius(3px);
     }
+
+    .select2-search--inline .select2-search__field {
+        margin-top: 6px;
+    }
 }
 
 .select2-container--default {
@@ -199,10 +295,10 @@ div.tagsinput {
         }
     }
 
-    .select2-selection--multiple,
-    &.select2-container--focus .select2-selection--multiple {
+    .select2-selection--multiple {
         border-color: @form-border-color;
         border-radius: 3px;
+        min-height: 34px;
 
         .form-material & {
             border: none;
@@ -217,6 +313,71 @@ div.tagsinput {
             .form-material & {
                 padding-left: 0;
             }
+        }
+    }
+
+    &.select2-container--focus .select2-selection--multiple,
+    &.select2-container--focus .select2-selection--single {
+        border-color: @form-border-focus-color;
+
+        .form-material & {
+            border-bottom-color: @form-border-focus-color;
+        }
+    }
+
+    .has-error & {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: @brand-danger;
+        }
+    }
+
+    .has-error &.select2-container--focus {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: darken(@brand-danger, 10%);
+        }
+    }
+
+    .has-success & {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: @brand-success;
+        }
+    }
+
+    .has-success &.select2-container--focus {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: darken(@brand-success, 10%);
+        }
+    }
+
+    .has-warning & {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: @brand-warning;
+        }
+    }
+
+    .has-warning &.select2-container--focus {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: darken(@brand-warning, 10%);
+        }
+    }
+
+    .has-info & {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: @brand-info;
+        }
+    }
+
+    .has-info &.select2-container--focus {
+        .select2-selection--single,
+        .select2-selection--multiple {
+            border-color: darken(@brand-info, 10%);
         }
     }
 
@@ -271,63 +432,32 @@ div.tagsinput {
 
 // Slick
 .slick-slider {
-    margin-bottom: 45px;
+    &.slick-dotted {
+        margin-bottom: 45px;
 
-    &.slick-padding-dots {
+        .slick-dots {
+            bottom: -35px;
+        }
+    }
+
+    &.slick-dotted.slick-padding-dots {
         padding-bottom: 45px;
         margin-bottom: 0;
 
         .slick-dots {
-            bottom: 0;
+            bottom: 10px;
         }
-    }
-
-    &.slick-nav-hover {
-        .slick-prev,
-        .slick-next {
-            opacity: 0;
-            .transition(opacity .25s ease-out);
-        }
-
-        &:hover {
-            .slick-prev,
-            .slick-next {
-                opacity: .25;
-
-                &:hover {
-                    opacity: .6;
-                }
-            }
-        }
-    }
-
-    &.slick-nav-white {
-        .slick-prev,
-        .slick-next {
-            background-color: #fff;
-
-            &:hover {
-                background-color: #fff;
-            }
-
-            &:before {
-                color: #000;
-            }
-        }
-    }
-
-    .slick-dots {
-        bottom: -45px;
     }
 
     .slick-prev,
     .slick-next {
-        margin-top: -15px;
+        margin-top: -5px;
         width: 40px;
         height: 40px;
         text-align: center;
         background-color: #000;
         opacity: .25;
+        z-index: 10;
 
         &:hover {
             background-color: #000;
@@ -356,11 +486,53 @@ div.tagsinput {
             content: "\f061";
         }
     }
+
+    &.slick-nav-white {
+        .slick-prev,
+        .slick-next {
+            background-color: #fff;
+            opacity: .4;
+
+            &:hover {
+                background-color: #fff;
+                opacity: .8;
+            }
+
+            &:before {
+                color: #000;
+            }
+        }
+    }
+
+    &.slick-nav-hover {
+        .slick-prev,
+        .slick-next {
+            opacity: 0;
+            .transition(opacity .25s ease-out);
+        }
+
+        &:hover {
+            .slick-prev,
+            .slick-next {
+                opacity: .25;
+
+                &:hover {
+                    opacity: .6;
+                }
+            }
+        }
+    }
 }
 
 // Summernote
 .note-editor {
-    border-color: #ddd;
+    .note-toolbar {
+        background-color: #fcfcfc !important;
+    }
+
+    &.note-frame {
+        border-color: #ddd;
+    }
 
     .note-toolbar {
         border-bottom-color: #ddd;
@@ -428,12 +600,16 @@ div.tagsinput {
     line-height: 1.4;
     color: rgba(0,0,0,.75);
     border: 1px solid #b5d0eb;
-    background-color: #b5d0eb;
     border-radius: 0;
 
     &:hover {
         color: rgba(0,0,0,.75);
     }
+}
+
+.fc-event,
+.fc-event-dot {
+    background-color: #b5d0eb;
 }
 
 .fc button {
@@ -516,4 +692,79 @@ div.tagsinput {
 // HTML5 Placeholder
 .placeholder {
     color: #aaa;
+}
+
+// SimpleMDE Markdown Editor
+.CodeMirror-fullscreen,
+.editor-toolbar.fullscreen,
+.editor-preview-side {
+    z-index: 1060;
+}
+
+.editor-preview {
+    z-index: 1050;
+}
+
+// DataTables
+table.dataTable {
+    border-collapse: collapse !important;
+
+    td,
+    th {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    thead  {
+        .sorting:after,
+        .sorting_asc:after,
+        .sorting_desc:after,
+        .sorting_asc_disabled:after,
+        .sorting_desc_disabled:after {
+            top: 15px;
+            right: 10px;
+            font-family: FontAwesome;
+            font-size: 14px;
+            opacity: .75;
+        }
+
+        .sorting:after {
+            content: "\f0dc";
+        }
+
+        .sorting_asc:after {
+            content: "\f106";
+        }
+
+        .sorting_desc:after {
+            content: "\f107";
+        }
+    }
+}
+
+div.dataTables_wrapper {
+    div.dataTables_info {
+        padding-top: 18px;
+    }
+
+    div.dataTables_paginate ul.pagination {
+        margin: 12px 0;
+    }
+
+    @media screen and (max-width: 767px) {
+        div.dataTables_length select,
+        div.dataTables_filter input {
+            width: 200px;
+        }
+
+        div.dataTables_filter,
+        div.dataTables_length {
+            text-align: right;
+        }
+
+        div.dataTables_info,
+        div.dataTables_paginate {
+            text-align: center;
+        }
+    }
 }

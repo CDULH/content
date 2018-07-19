@@ -1,10 +1,12 @@
 /*
  *  Document   : base_comp_maps.js
  *  Author     : pixelcave
- *  Description: Custom JS code used in Maps Page
+ *  Description: Custom JS code used in Google Maps Page
  */
 
 var BaseCompMaps = function() {
+    // Gmaps.js, for more examples you can check out https://hpneo.github.io/gmaps/
+
     // Init Search Map
     var initMapSearch = function(){
         // Init Map
@@ -138,8 +140,6 @@ var BaseCompMaps = function() {
 
     return {
         init: function () {
-            // Gmaps.js, for more examples you can check out https://hpneo.github.io/gmaps/
-
             // Init Map with Search functionality
             initMapSearch();
 
