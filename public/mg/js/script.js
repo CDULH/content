@@ -361,5 +361,49 @@ window.swalLoadOver = function () {
     App.loader('hide')
 }
 
+/**
+ *
+ */
+window.uploadImage = function(){
+
+
+    $("#upload").click(function () {
+        $("#uploadInput").click();
+    });
+
+    $("#uploadInput").change(function (result) {
+        var formData = new FormData();
+        formData.append("file", $('input[name=file]')[0].files[0]);
+        var url = $("#upload").data("url");console.log(url);
+        swalLoad();
+        $.ajax({
+            url: url,
+            type: 'post',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            processData:false,
+            contentType: false,
+            success: function (res) {
+                swalLoadOver();
+                console.log(res);
+                if( res.code == 0 ){
+                    swalAlert("上传成功", function () {
+                        $("#imgDiv").css("display", "block");
+                        $("input[name=file_id]").val(res.data.id);
+                        $("#uploadImgSrc").attr("src", res.data.path);
+                    })
+                }else{
+                    swalAlert(res.msg?res.msg:"上传失败");
+                }
+            },
+            error: function(){
+                swalLoadOver();
+            }
+        })
+    });
+}
+
+
 
 

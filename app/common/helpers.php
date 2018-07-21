@@ -18,9 +18,9 @@ function returnJsonData ( $data )
 //响应json请求格式数据
 function responseJsonData ( $code = 0, $msg = '', $data = null )
 {
-	$arr = [ 'code' => $code, 'msg' => $msg, 'data' => $data, ];
+	$arr     = [ 'code' => $code, 'msg' => $msg, 'data' => $data, ];
 	$request = new \Illuminate\Http\Request();
-	apiLog($code, $request->path(), '', '', $request->all()?$request->all():'', $data?$data:'', $msg);
+	apiLog( $code, $request->path(), '', '', $request->all() ? $request->all() : '', $data ? $data : '', $msg );
 	return response()->json( $arr );
 }
 
@@ -28,7 +28,7 @@ function responseJsonData ( $code = 0, $msg = '', $data = null )
 function getEncryptionString ( $string, $salt )
 {
 	if ( !$string || !$salt ) return false;
-	
+
 	return md5( $string . md5( $string . $salt ) . $salt );
 }
 
@@ -46,6 +46,12 @@ function adminSessionGet ( $key )
 function adminSessionForget ( $key )
 {
 	return Session::forget( $key );
+}
+
+function getImgurl ( $id )
+{
+	$data = \App\Eloquent\File::where( 'id', $id )->first();
+	return "http://" . $_SERVER[ "SERVER_NAME" ] . '/storage/' . $data[ 'path' ];
 }
 
 /**
@@ -75,7 +81,7 @@ function httpGet ( $url )
 
 /**
  * 以post方式提交请求
- * @param string $url
+ * @param string       $url
  * @param array|string $data
  * @return bool|mixed
  */
@@ -116,7 +122,7 @@ function apiLog ( $code = 0, $module = '', $controller = '', $action = '', $post
 		'return_params' => $returnParams,
 		'msg'           => $msg,
 	];
-	
+
 	$ApiLog = new \App\Eloquent\ApiLog();
 	$ApiLog->saveOne( $data );
 }

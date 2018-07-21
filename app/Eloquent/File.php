@@ -6,22 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Base
 {
-    //
+	//
 	protected $table = 'file';
-	
-	public function saveOne($data){
-		$id = $data['id'];
-		if( $id ){
-			$obj = $this->where('id', $id)->first();
-		}else{
+
+	public function saveOne ( $data, &$id = 0 )
+	{
+		$id = isset( $data[ 'id' ] ) ? $data[ 'id' ] : 0;
+		if ( $id ) {
+			$obj = $this->where( 'id', $id )->first();
+		} else {
 			$obj = $this;
 		}
-		
-		$obj->path = $data['path'];
-		
+
+		$obj->path = $data[ 'path' ];
+
 		$re = $obj->save();
-		if( !$re ) return false;
-		
+		$id = $obj->id;
+		if ( !$re ) return false;
+
 		return true;
 	}
 }

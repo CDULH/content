@@ -38,7 +38,7 @@ class BannerController extends BaseController
 			$data = $this->Banner->getOne( [ [ 'id', $id ] ] );
 		else
 			$data = [];
-		
+
 		return view( 'banner.modify', [ 'title' => 'banner', 'data' => $data, 'channels' => BannerChannelEnum::getBannerChannelArr() ] );
 	}
 	

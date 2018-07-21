@@ -41,3 +41,6 @@ Route::match( ['get'], '/banner', 'BannerController@index' )->name('banner');
 Route::match( ['get'], '/banner/modify/{id?}', 'BannerController@modify' )->name('banner/modify');
 Route::match( ['get'], '/banner/remove/{id}', 'BannerController@remove' )->name('banner/remove');
 Route::match( ['post'], '/banner/modifyPost', 'BannerController@modifyPost' )->name('banner/modifyPost');
+
+Route::match( ['post'], '/file/modifyPost', 'FileController@modifyPost' )->name('file/modifyPost');
+Route::match( ['post'], '/file/remove', 'FileController@remove' )->name('file/remove');
