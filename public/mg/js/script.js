@@ -365,8 +365,6 @@ window.swalLoadOver = function () {
  *
  */
 window.uploadImage = function(){
-
-
     $("#upload").click(function () {
         $("#uploadInput").click();
     });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Eloquent\Banner;
 use App\Eloquent\Config;
 use App\Eloquent\File;
 use App\Http\Requests\ConfigRequest;
@@ -48,6 +49,10 @@ class FileController extends BaseController
 
 		$re = $this->obj->deleteOne( $id );
 		if ( !$id ) return responseJsonData( 1, '删除失败' );
+
+		if( Banner::where('file_id', $id)->first() ){
+			Banner::where('file_id', $id)->update(['file_id'=>0]);
+		}
 
 		return responseJsonData();
 	}
