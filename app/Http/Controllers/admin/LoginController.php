@@ -22,6 +22,16 @@ class LoginController extends Controller
 		if ( $request->isMethod( "post" ) ) {
 			$username = $request->get( 'username', '' );
 			$password = $request->get( 'password', '' );
+			$verify = $request->get( 'verify', '' );
+			
+			if( !$verify || !$username || !$password ){
+				return responseJsonData(1, '参数缺失');
+			}
+			
+			$code = $request->session()->get("login_captche");
+			if( $code != $verify ){
+				return responseJsonData(1, '验证码错误');
+			}
 			
 			$msg = '';
 			$re = $this->ManagerLogic->login( $username, $password, $msg );

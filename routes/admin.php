@@ -44,3 +44,6 @@ Route::match( ['post'], '/banner/modifyPost', 'BannerController@modifyPost' )->n
 
 Route::match( ['post'], '/file/modifyPost', 'FileController@modifyPost' )->name('file/modifyPost');
 Route::match( ['post'], '/file/remove', 'FileController@remove' )->name('file/remove');
+
+Route::match( ['get'], '/code/captcha/{id}', 'CodeController@captcha' )->name('code/captcha');
+Route::match( ['get'], '/code/check', 'CodeController@check' )->name('code/check');

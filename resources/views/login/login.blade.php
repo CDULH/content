@@ -143,10 +143,10 @@
 							<input class="form-control" placeholder="密码" name="password" type="password" value="">
 						</div>
 						{{csrf_field()}}
-						{{--<div class="form-group form-inline">
+						<div class="form-group form-inline">
 							<input class="form-control" placeholder="验证码" name="verify" type="text" value="">
 							<img id="verify" src="" onclick="refirshVerify()"/>
-						</div>--}}
+						</div>
 						<input type="submit" name="submit" class="btn btn-lg btn-success btn-block" value="登录"/>
 					</fieldset>
 				</div>
@@ -157,16 +157,16 @@
 <script src="/mg/js/jquery.js"></script>
 <script type="text/javascript">
     function refirshVerify() {
-        $("#verify").attr("src", "{{url('Login/verify')}}" + "?" + Math.random());
+        $("#verify").attr("src", "{{url('admin/code/captcha')}}" + "/" + Math.round(Math.random()*100000));
     }
 
     $(function () {
-        //refirshVerify();
+        refirshVerify();
 
         $('input[name="submit"]').click(function () {
             var account = $('input[name="account"]').val(),
-                password = $('input[name="password"]').val();
-            // verify = $('input[name="verify"]').val();
+                password = $('input[name="password"]').val(),
+            verify = $('input[name="verify"]').val();
 
             if (!account) {
                 return alert('帐号不能为空');
@@ -174,13 +174,13 @@
             if (!password || password.length < 6) {
                 return alert('密码有误');
             }
-            /*if (!verify || verify.length != 5) {
+            if (!verify || verify.length != 5) {
                 return alert('验证码有误');
-            }*/
+            }
             $.ajax({
                 url: '{{url("admin/login/login")}}',
                 type: 'post',
-                data: {username: account, password: password},
+                data: {username: account, password: password, verify: verify},
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
@@ -188,8 +188,8 @@
                         alert('登录成功');
                         location.href = '{{url("admin")}}';
                     } else {
-                        alert(data && data.errmsg ? data.errmsg : '登录失败');
-                        //refirshVerify();
+                        alert(data && data.msg ? data.msg : '登录失败');
+                        refirshVerify();
                     }
                 }
             });
