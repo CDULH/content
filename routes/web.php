@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/', "admin\LoginController@login");
+Route::get('/', "Admin\LoginController@login");
