@@ -18,7 +18,7 @@ class CheckLogin
     {
     	//检查登陆
 		$name = $request->path();
-    	if( $name != 'admin/login/login' && $name != 'admin/logout' ){
+    	if( $name != 'admin/login/login' && $name != 'admin/logout' && strpos($name, 'admin/code/captcha') === false  ){
 			$manager = adminSessionGet('managerData');
 			if( !$manager ){
 				return redirect()->route("login");
