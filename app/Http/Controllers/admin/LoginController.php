@@ -28,10 +28,10 @@ class LoginController extends Controller
 				return responseJsonData(1, '参数缺失');
 			}
 			
-			/*$code = $request->session()->get("login_captche");
+			$code = $request->session()->get("login_captche");
 			if( $code != $verify ){
 				return responseJsonData(1, '验证码错误');
-			}*/
+			}
 			
 			$msg = '';
 			$re = $this->ManagerLogic->login( $username, $password, $msg );

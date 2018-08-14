@@ -11,7 +11,6 @@ class CodeController extends Controller
 	/***
 	 * 获取验证码
 	 * @param Request $request
-	 * @param $id
 	 * @return $this
 	 */
     public function captcha( Request $request){

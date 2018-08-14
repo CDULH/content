@@ -143,10 +143,10 @@
 							<input class="form-control" placeholder="密码" name="password" type="password" value="">
 						</div>
 						{{csrf_field()}}
-						{{--<div class="form-group form-inline">
+						<div class="form-group form-inline">
 							<input class="form-control" placeholder="验证码" name="verify" type="text" value="">
 							<img id="verify" src="" onclick="refirshVerify()"/>
-						</div>--}}
+						</div>
 						<input type="submit" name="submit" class="btn btn-lg btn-success btn-block" value="登录"/>
 					</fieldset>
 				</div>
@@ -174,9 +174,9 @@
             if (!password || password.length < 6) {
                 return alert('密码有误');
             }
-            /*if (!verify || verify.length != 5) {
+            if (!verify || verify.length != 5) {
                 return alert('验证码有误');
-            }*/
+            }
             $.ajax({
                 url: '{{url("admin/login/login")}}',
                 type: 'post',

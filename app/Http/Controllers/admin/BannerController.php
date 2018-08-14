@@ -54,7 +54,7 @@ class BannerController extends BaseController
 	public function remove ( Request $request, $id )
 	{
 		$re = $this->Banner->deleteOne( $id );
-		if ( !$id ) return back();
+		if ( !$re ) return back();
 		
 		return redirect()->route( 'banner' );
 	}

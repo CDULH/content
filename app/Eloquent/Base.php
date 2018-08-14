@@ -46,7 +46,7 @@ class Base extends Model
 	public function getAll ( $where = [] )
 	{
 		try {
-			return $this->get();
+			return $this->where($where)->get();
 		}
 		catch ( \Exception $e ) {
 			return null;
@@ -57,6 +57,7 @@ class Base extends Model
 	 * 删除
 	 * @param $id
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function deleteOne ( $id )
 	{
